@@ -1,4 +1,20 @@
+require 'open3'
+
 puts "Let's build the codebase"
+
+# Function to execute a shell command
+def execute_command(command)
+  stdout, stderr, status = Open3.capture3(command)
+
+  if status.success?
+    puts "Running Command: #{command}"
+    puts "Output:\n#{stdout.strip}"
+  else
+    puts "Command failed!"
+    puts "Error:\n#{stderr.strip}"
+    exit(status.exitstatus) # Exit the program with the command's exit status
+  end
+end
 
 def strip_newlines_and_spaces(input)
     input.gsub(/\s+/, '') # Removes all spaces and newlines
@@ -11,8 +27,7 @@ def process_build_file(build_file_path)
     Dir.chdir(current_directory)
     build_file_contents = File.readlines(build_file_path)
     build_file_contents.each do |file_content|
-        output = `#{file_content}`
-        puts output
+        execute_command(file_content)
     end
     Dir.chdir(cached_current_working_directory)
 end
