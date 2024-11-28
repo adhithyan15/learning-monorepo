@@ -1,5 +1,5 @@
 name: Linux Build Test Lint
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: Building And Testing Changes In Linux 🚀
 on: [push]
 jobs:
   Linux-Build-Test-Lint:

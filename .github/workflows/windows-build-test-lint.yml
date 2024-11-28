@@ -1,5 +1,5 @@
 name: Windows Build Test Lint
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: Building and Testing changes on Windows 🚀
 on: [push]
 jobs:
   Windows-Build-Test-Lint:

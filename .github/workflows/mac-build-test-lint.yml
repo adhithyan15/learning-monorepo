@@ -1,5 +1,5 @@
 name: Mac Build Test Lint
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: Building And Testing Changes In Mac 🚀
 on: [push]
 jobs:
   Mac-Build-Test-Lint:
