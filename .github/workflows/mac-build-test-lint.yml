@@ -14,4 +14,6 @@ jobs:
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - run: brew install go
       - run: go version
+      - run: brew install rust
+      - run: rustc --help
       - run: ruby code/programs/ruby/monorepo_build/build.rb
