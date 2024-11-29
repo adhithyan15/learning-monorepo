@@ -16,4 +16,6 @@ jobs:
       - run: choco install rust
       - run: choco install llvm
       - run: clang -v
+      - run: choco install mingw
+      - run: gcc --version
       - run: ruby code/programs/ruby/monorepo_build/build.rb
