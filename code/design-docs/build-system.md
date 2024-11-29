@@ -42,3 +42,13 @@ fibonacci
 ```
 
 The build script will look for these two files and at the end of the day will simply run the command line instructions. 
+
+### V2 Update
+Every operating system has quirks. So, we need to add support for operating system specific build steps. To achieve this, I am introducing the
+concept of operating system specific `BUILD` files. Three files will be detected by the build script
+
+* BUILD_mac - Mac OS specific build instructions
+* BUILD_linux - Linux OS specific build instructions
+* BUILD_windows - Windows OS specific build instructions
+
+If an operating system other than the one specified is found, the build file is simply skipped. 

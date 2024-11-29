@@ -3,11 +3,10 @@ require 'open3'
 puts "Let's build the codebase"
 
 # Function to execute a shell command
-def execute_command(command)
-  stdout, stderr, status = Open3.capture3(command)
-
+def execute_command(command, current_working_directory)
+  stdout, stderr, status = Open3.capture3(command, :chdir=> current_working_directory)
+  puts "Running Command: #{command}"
   if status.success?
-    puts "Running Command: #{command}"
     puts "Output:\n#{stdout.strip}"
   else
     puts "Command failed!"
@@ -22,14 +21,29 @@ def strip_newlines_and_spaces(input)
 
 def process_build_file(build_file_path)
     puts "Detected a BUILD file in #{build_file_path}"
+    if build_file_path.include?("_windows")
+        unless (RUBY_PLATFORM.include?("mingw32") || RUBY_PLATFORM.include?("mswin"))
+            puts "Not a Windows OS. Skipping this build file"
+            return
+        end
+    end
+    if build_file_path.include?("_mac")
+        unless RUBY_PLATFORM.include?("darwin")
+            puts "Not a Mac OS. Skipping the build file"
+            return
+        end
+    end
+    if build_file_path.include?("_linux")
+        unless RUBY_PLATFORM.include?("linux")
+            puts "Not a Linux based OS. Skipping the build file"
+            return
+        end
+    end
     current_directory = File.dirname(build_file_path)
-    cached_current_working_directory = Dir.pwd
-    Dir.chdir(current_directory)
     build_file_contents = File.readlines(build_file_path)
     build_file_contents.each do |file_content|
-        execute_command(file_content)
+        execute_command(file_content, current_directory)
     end
-    Dir.chdir(cached_current_working_directory)
 end
 
 def process_dirs_file(dirs_file_path)
@@ -66,4 +80,3 @@ Dir.foreach(folder_path) do |entry|
         end
     end
 end
-
