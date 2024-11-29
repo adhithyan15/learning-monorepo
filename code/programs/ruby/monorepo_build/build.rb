@@ -3,8 +3,8 @@ require 'open3'
 puts "Let's build the codebase"
 
 # Function to execute a shell command
-def execute_command(command)
-  stdout, stderr, status = Open3.capture3(command)
+def execute_command(command, current_working_directory)
+  stdout, stderr, status = Open3.capture3(command, :chdir=> current_working_directory)
   puts "Running Command: #{command}"
   if status.success?
     puts "Output:\n#{stdout.strip}"
@@ -40,13 +40,10 @@ def process_build_file(build_file_path)
         end
     end
     current_directory = File.dirname(build_file_path)
-    cached_current_working_directory = Dir.pwd
-    Dir.chdir(current_directory)
     build_file_contents = File.readlines(build_file_path)
     build_file_contents.each do |file_content|
-        execute_command(file_content)
+        execute_command(file_content, current_directory)
     end
-    Dir.chdir(cached_current_working_directory)
 end
 
 def process_dirs_file(dirs_file_path)
