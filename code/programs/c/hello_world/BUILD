@@ -1,4 +1,5 @@
 clang hello_world.c -o hello_world
+ls
 ./hello_world
 gcc hello_world.c -o hello_world2
 ./hello_world2
