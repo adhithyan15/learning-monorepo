@@ -5,9 +5,8 @@ puts "Let's build the codebase"
 # Function to execute a shell command
 def execute_command(command)
   stdout, stderr, status = Open3.capture3(command)
-
+  puts "Running Command: #{command}"
   if status.success?
-    puts "Running Command: #{command}"
     puts "Output:\n#{stdout.strip}"
   else
     puts "Command failed!"
