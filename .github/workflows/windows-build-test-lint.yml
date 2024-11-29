@@ -14,4 +14,6 @@ jobs:
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - run: go version
       - run: choco install rust
+      - run: choco install llvm
+      - run: clang -v
       - run: ruby code/programs/ruby/monorepo_build/build.rb
