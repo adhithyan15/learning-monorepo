@@ -19,5 +19,5 @@ jobs:
       - run: choco install mingw
       - run: gcc --version
       - run: choco install erlang
-      - run: choch install gnucobol
+      - run: choco install gnucobol
       - run: ruby code/programs/ruby/monorepo_build/build.rb
