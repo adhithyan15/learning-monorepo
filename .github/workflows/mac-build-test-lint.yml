@@ -19,4 +19,5 @@ jobs:
       - run: clang -v
       - run: gcc --version
       - run: brew install gfortran
+      - run: brew install erlang
       - run: ruby code/programs/ruby/monorepo_build/build.rb

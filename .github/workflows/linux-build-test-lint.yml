@@ -16,4 +16,5 @@ jobs:
       - run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -y 1
       - run: clang -v
       - run: gcc --version
+      - run: sudo apt-get install erlang
       - run: ruby code/programs/ruby/monorepo_build/build.rb
