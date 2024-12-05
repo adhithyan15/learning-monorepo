@@ -18,4 +18,5 @@ jobs:
       - run: rustc --help
       - run: clang -v
       - run: gcc --version
+      - run: brew install gfortran
       - run: ruby code/programs/ruby/monorepo_build/build.rb
