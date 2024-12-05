@@ -18,4 +18,5 @@ jobs:
       - run: clang -v
       - run: choco install mingw
       - run: gcc --version
+      - run: choco install erlang
       - run: ruby code/programs/ruby/monorepo_build/build.rb
