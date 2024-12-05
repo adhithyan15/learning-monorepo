@@ -1,0 +1,2 @@
+gfortran-14 -o hello_world hello_world.f90
+./hello_world
