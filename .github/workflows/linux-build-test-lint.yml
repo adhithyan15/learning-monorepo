@@ -17,4 +17,5 @@ jobs:
       - run: clang -v
       - run: gcc --version
       - run: sudo apt-get install erlang
+      - run: sudo apt-get install gnucobol
       - run: ruby code/programs/ruby/monorepo_build/build.rb
