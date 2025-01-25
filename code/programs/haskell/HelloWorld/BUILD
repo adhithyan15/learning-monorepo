@@ -1,2 +1,2 @@
-ghc .\Main.hs -o hello_world
+ghc Main.hs -o hello_world
 .\hello_world
