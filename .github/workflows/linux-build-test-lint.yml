@@ -19,4 +19,5 @@ jobs:
       - run: gcc --version
       - run: sudo apt-get install erlang
       - run: sudo apt-get install gnucobol
+      - run: curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
       - run: ruby code/programs/ruby/monorepo_build/build.rb

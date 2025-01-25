@@ -21,4 +21,5 @@ jobs:
       - run: brew install gfortran
       - run: brew install erlang
       - run: brew install gnucobol
+      - run: brew install ghc
       - run: ruby code/programs/ruby/monorepo_build/build.rb
