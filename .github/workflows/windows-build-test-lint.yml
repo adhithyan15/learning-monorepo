@@ -23,4 +23,5 @@ jobs:
       - run: choco install strawberryperl
       - run: choco install haskell-dev
       - run: choco install openjdk
+      - run: choco install zig
       - run: ruby code/programs/ruby/monorepo_build/build.rb
