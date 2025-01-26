@@ -23,4 +23,8 @@ jobs:
       - run: sudo apt-get install openjdk-17-jdk
       - run: sudo apt-get install openjdk-17-jre
       - run: sudo snap install zig --classic --beta
+      - run: sudo add-apt-repository ppa:dotnet/backports
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y dotnet-sdk-9.0
+      - run: dotnet --help
       - run: ruby code/programs/ruby/monorepo_build/build.rb
