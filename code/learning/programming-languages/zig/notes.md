@@ -1,0 +1,2 @@
+# Zig
+Zig is a low-level and general purpose programming language. It can be thought of as a modern version of C. The philosophy of Zig is that you should focus on debugging your application rather than debugging your programming language knowledge. 

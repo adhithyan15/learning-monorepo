@@ -23,4 +23,5 @@ jobs:
       - run: brew install gnucobol
       - run: brew install ghc
       - run: brew install openjdk
+      - run: brew install zig
       - run: ruby code/programs/ruby/monorepo_build/build.rb

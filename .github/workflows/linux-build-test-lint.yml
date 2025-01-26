@@ -22,4 +22,5 @@ jobs:
       - run: curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
       - run: sudo apt-get install openjdk-17-jdk
       - run: sudo apt-get install openjdk-17-jre
+      - run: sudo snap install zig --classic --beta
       - run: ruby code/programs/ruby/monorepo_build/build.rb
