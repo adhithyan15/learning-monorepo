@@ -25,4 +25,5 @@ jobs:
       - run: brew install openjdk
       - run: brew install zig
       - run: brew install --cask dotnet-sdk
+      - run: dotnet --help
       - run: ruby code/programs/ruby/monorepo_build/build.rb
