@@ -24,4 +24,5 @@ jobs:
       - run: choco install haskell-dev
       - run: choco install openjdk
       - run: choco install zig
+      - run: csc --help
       - run: ruby code/programs/ruby/monorepo_build/build.rb

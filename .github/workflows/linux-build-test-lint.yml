@@ -23,4 +23,7 @@ jobs:
       - run: sudo apt-get install openjdk-17-jdk
       - run: sudo apt-get install openjdk-17-jre
       - run: sudo snap install zig --classic --beta
+      - run: wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+      - run: chmod +x ./dotnet-install.sh
+      - run: ./dotnet-install.sh --version latest
       - run: ruby code/programs/ruby/monorepo_build/build.rb
