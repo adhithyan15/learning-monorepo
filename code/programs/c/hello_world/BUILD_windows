@@ -1,5 +1,5 @@
-clang hello_world.c -o hello_world
+clang hello_world.c -o hello_world.exe
 dir
 .\hello_world.exe
-gcc hello_world.c -o hello_world2
+gcc hello_world.c -o hello_world2.exe
 .\hello_world2.exe
