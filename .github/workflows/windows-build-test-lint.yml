@@ -28,4 +28,8 @@ jobs:
           choco install openjdk
           choco install zig
           dotnet --help
+          choco install lua
+          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+          refreshenv
+          lua -v
           ruby code/programs/ruby/monorepo_build/build.rb
