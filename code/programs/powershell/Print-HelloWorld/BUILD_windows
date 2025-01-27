@@ -1,1 +1,2 @@
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -and .\Print-HelloWorld.ps1
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\Print-HelloWorld.ps1
