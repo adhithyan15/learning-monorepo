@@ -27,4 +27,5 @@ jobs:
       - run: brew install --cask dotnet-sdk
       - run: dotnet --help
       - run: brew install lua
+      - run: lua -v
       - run: ruby code/programs/ruby/monorepo_build/build.rb
