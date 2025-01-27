@@ -12,17 +12,19 @@ jobs:
         uses: actions/checkout@v4
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - run: go version
-      - run: choco install rust
-      - run: choco install llvm
-      - run: clang -v
-      - run: choco install mingw
-      - run: gcc --version
-      - run: choco install erlang
-      - run: choco install gnucobol
-      - run: choco install strawberryperl
-      - run: choco install haskell-dev
-      - run: choco install openjdk
-      - run: choco install zig
-      - run: dotnet --help
-      - run: ruby code/programs/ruby/monorepo_build/build.rb
+      - name: Installing necessary software and running the build script
+        shell: pwsh
+        run: go version
+        run: choco install rust
+        run: choco install llvm
+        run: clang -v
+        run: choco install mingw
+        run: gcc --version
+        run: choco install erlang
+        run: choco install gnucobol
+        run: choco install strawberryperl
+        run: choco install haskell-dev
+        run: choco install openjdk
+        run: choco install zig
+        run: dotnet --help
+        run: ruby code/programs/ruby/monorepo_build/build.rb
