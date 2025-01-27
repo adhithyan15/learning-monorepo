@@ -1,2 +1,1 @@
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\Print-HelloWorld.ps1
+powershell -File .\Print-HelloWorld.ps1
