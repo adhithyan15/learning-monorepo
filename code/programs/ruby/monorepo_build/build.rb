@@ -27,13 +27,17 @@ def process_build_file(build_file_path)
             return
         end
     end
-    if build_file_path.include?("_mac")
+    if build_file_path.include?("_mac_and_linux")
+        unless (RUBY_PLATFORM.include?("darwin") || RUBY_PLATFORM.include?("linux"))
+            puts "Not a Mac or Linux OS. Skipping the build file"
+            return
+        end
+    elsif build_file_path.include?("_mac")
         unless RUBY_PLATFORM.include?("darwin")
             puts "Not a Mac OS. Skipping the build file"
             return
         end
-    end
-    if build_file_path.include?("_linux")
+    elsif build_file_path.include?("_linux")
         unless RUBY_PLATFORM.include?("linux")
             puts "Not a Linux based OS. Skipping the build file"
             return

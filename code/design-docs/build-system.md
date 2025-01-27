@@ -52,3 +52,6 @@ concept of operating system specific `BUILD` files. Three files will be detected
 * BUILD_windows - Windows OS specific build instructions
 
 If an operating system other than the one specified is found, the build file is simply skipped. 
+
+### V3 Update
+Windows provides a number of challenges. So, for many things, I might first start building on linux and mac and then come back to Windows. But I currently have to two separate BUILD files for linux and mac. So, I am introducing a new BUILD file with a prefix called `BUILD_mac_and_linux`. The build system will detect this and use the logic in the file to build both mac and linux. 
