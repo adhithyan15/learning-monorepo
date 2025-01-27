@@ -26,5 +26,7 @@ jobs:
       - run: choco install zig
       - run: dotnet --help
       - run: choco install lua
+      - run: Import-Module "$env:ChocolateyInstall/helpers/chocolateyInstaller.psm1"
+      - run: refreshenv
       - run: lua -v
       - run: ruby code/programs/ruby/monorepo_build/build.rb
