@@ -32,5 +32,5 @@ jobs:
           Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
           refreshenv
           lua -v
-          powershell -File Find-CLCompiler.ps1
-          ruby code/programs/ruby/monorepo_build/build.rb
+          powershell -File code\programs\powershell\Find-CLCompiler\Find-CLCompiler.ps1
+          ruby code\programs\ruby\monorepo_build\build.rb
