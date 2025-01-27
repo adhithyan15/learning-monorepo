@@ -29,4 +29,5 @@ jobs:
       - run: dotnet --help
       - run: sudo apt-get install lua5.4 liblua5.4-dev
       - run: lua -v
+      - run: sudo snap install powershell --classic
       - run: ruby code/programs/ruby/monorepo_build/build.rb

@@ -28,4 +28,5 @@ jobs:
       - run: dotnet --help
       - run: brew install lua
       - run: lua -v
+      - run: brew install powershell/tap/powershell
       - run: ruby code/programs/ruby/monorepo_build/build.rb
