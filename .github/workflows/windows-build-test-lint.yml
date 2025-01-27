@@ -14,17 +14,18 @@ jobs:
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: Installing necessary software and running the build script
         shell: pwsh
-        run: go version
-        run: choco install rust
-        run: choco install llvm
-        run: clang -v
-        run: choco install mingw
-        run: gcc --version
-        run: choco install erlang
-        run: choco install gnucobol
-        run: choco install strawberryperl
-        run: choco install haskell-dev
-        run: choco install openjdk
-        run: choco install zig
-        run: dotnet --help
-        run: ruby code/programs/ruby/monorepo_build/build.rb
+        run: |
+          go version
+          choco install rust
+          choco install llvm
+          clang -v
+          choco install mingw
+          gcc --version
+          choco install erlang
+          choco install gnucobol
+          choco install strawberryperl
+          choco install haskell-dev
+          choco install openjdk
+          choco install zig
+          dotnet --help
+          ruby code/programs/ruby/monorepo_build/build.rb
