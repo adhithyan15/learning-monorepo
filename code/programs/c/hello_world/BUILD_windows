@@ -2,5 +2,5 @@ clang hello_world.c -o hello_world.exe
 .\hello_world.exe
 gcc hello_world.c -o hello_world2.exe
 .\hello_world2.exe
-cl /Fehello_world3.exe hello_world.c
+cl.exe /Fehello_world3.exe hello_world.c
 .\hello_world3.exe
