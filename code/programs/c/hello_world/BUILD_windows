@@ -2,5 +2,6 @@ clang hello_world.c -o hello_world.exe
 .\hello_world.exe
 gcc hello_world.c -o hello_world2.exe
 .\hello_world2.exe
+for /f "usebackq tokens=*" %%i in (`vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set VCINSTALLDIR=%%i && call "%VCINSTALLDIR%\VC\Auxiliary\Build\vcvars64.bat" && cl.exe /?
 cl.exe /Fehello_world3.exe hello_world.c
 .\hello_world3.exe
