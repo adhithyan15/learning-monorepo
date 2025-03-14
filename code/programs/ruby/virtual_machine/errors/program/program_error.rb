@@ -1,0 +1,1 @@
+class ProgramError < StandardError; end
