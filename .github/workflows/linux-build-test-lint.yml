@@ -27,4 +27,5 @@ jobs:
       - run: sudo apt-get update
       - run: sudo apt-get install -y dotnet-sdk-9.0
       - run: dotnet --help
+      - run: sudo apt-get install r-base
       - run: ruby code/programs/ruby/monorepo_build/build.rb

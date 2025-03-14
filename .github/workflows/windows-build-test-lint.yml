@@ -25,4 +25,5 @@ jobs:
       - run: choco install openjdk
       - run: choco install zig
       - run: dotnet --help
+      - run: choco install r
       - run: ruby code/programs/ruby/monorepo_build/build.rb
