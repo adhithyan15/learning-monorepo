@@ -27,6 +27,7 @@ jobs:
       - run: sudo apt-get update
       - run: sudo apt-get install -y dotnet-sdk-9.0
       - run: dotnet --help
+      - run: sudo apt-get install r-base-core
       - run: sudo apt-get install lua5.4 liblua5.4-dev
       - run: lua -v
       - run: sudo snap install powershell --classic

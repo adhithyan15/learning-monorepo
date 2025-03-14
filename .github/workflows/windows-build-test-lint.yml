@@ -31,6 +31,7 @@ jobs:
           choco install zig
           dotnet --help
           choco install lua
+          choco install r
           Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
           refreshenv
           lua -v
