@@ -1,0 +1,2 @@
+chmod +x hello_world.sh
+bash hello_world.sh
