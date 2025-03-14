@@ -1,1 +1,1 @@
-rscript hello_world.r
+Rscript hello_world.r
