@@ -21,23 +21,23 @@ def strip_newlines_and_spaces(input)
 
 def process_build_file(build_file_path)
     puts "Detected a BUILD file in #{build_file_path}"
-    if build_file_path.include?("_windows")
+    if build_file_path.end_with?("_windows")
         unless (RUBY_PLATFORM.include?("mingw32") || RUBY_PLATFORM.include?("mswin"))
             puts "Not a Windows OS. Skipping this build file"
             return
         end
     end
-    if build_file_path.include?("_mac_and_linux")
+    if build_file_path.end_with?("_mac_and_linux")
         unless (RUBY_PLATFORM.include?("darwin") || RUBY_PLATFORM.include?("linux"))
             puts "Not a Mac or Linux OS. Skipping the build file"
             return
         end
-    elsif build_file_path.include?("_mac")
+    elsif build_file_path.end_with?("_mac")
         unless RUBY_PLATFORM.include?("darwin")
             puts "Not a Mac OS. Skipping the build file"
             return
         end
-    elsif build_file_path.include?("_linux")
+    elsif build_file_path.end_with?("_linux")
         unless RUBY_PLATFORM.include?("linux")
             puts "Not a Linux based OS. Skipping the build file"
             return
