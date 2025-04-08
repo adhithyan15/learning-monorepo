@@ -31,4 +31,5 @@ jobs:
       - run: lua -v
       - run: brew install powershell/tap/powershell
       - run: gem install rspec
+      - run: npm install -g typescript
       - run: ruby code/programs/ruby/monorepo_build/build.rb

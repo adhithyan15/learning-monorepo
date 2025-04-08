@@ -36,4 +36,5 @@ jobs:
           Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
           refreshenv
           lua -v
+          npm install -g typescript
           ruby code\programs\ruby\monorepo_build\build.rb
