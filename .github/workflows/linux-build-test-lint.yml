@@ -32,4 +32,5 @@ jobs:
       - run: lua -v
       - run: sudo snap install powershell --classic
       - run: sudo gem install rspec
+      - run: sudo npm install -g typescript
       - run: ruby code/programs/ruby/monorepo_build/build.rb
