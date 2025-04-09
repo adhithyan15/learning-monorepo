@@ -37,4 +37,5 @@ jobs:
           refreshenv
           lua -v
           npm install -g typescript
+          gem install bundler
           ruby code\programs\ruby\monorepo_build\build.rb

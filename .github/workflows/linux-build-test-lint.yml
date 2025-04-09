@@ -33,4 +33,5 @@ jobs:
       - run: sudo snap install powershell --classic
       - run: sudo gem install rspec
       - run: sudo npm install -g typescript
+      - run: sudo gem install bundler
       - run: ruby code/programs/ruby/monorepo_build/build.rb
