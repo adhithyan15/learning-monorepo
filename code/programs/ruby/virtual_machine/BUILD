@@ -1,1 +1,0 @@
-rspec spec/program_spec.rb
