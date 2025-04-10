@@ -21,7 +21,6 @@ jobs:
       - name: Installing necessary software and running the build script
         shell: pwsh
         run: |
-          choco install ruby
           go version
           choco install rust
           choco install llvm
