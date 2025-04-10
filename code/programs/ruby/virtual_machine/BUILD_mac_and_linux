@@ -1,2 +1,2 @@
 sudo gem install rspec
-rspec spec/program_spec.rb
+rspec
