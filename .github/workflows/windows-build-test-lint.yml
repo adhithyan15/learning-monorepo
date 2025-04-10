@@ -41,4 +41,5 @@ jobs:
           refreshenv
           lua -v
           npm install -g typescript
+          choco install deno
           ruby code\programs\ruby\monorepo_build\build.rb

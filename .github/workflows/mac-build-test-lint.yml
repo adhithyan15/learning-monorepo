@@ -32,4 +32,5 @@ jobs:
       - run: brew install powershell/tap/powershell
       - run: gem install rspec
       - run: npm install -g typescript
+      - run: curl -fsSL https://deno.land/install.sh | sh
       - run: ruby code/programs/ruby/monorepo_build/build.rb
