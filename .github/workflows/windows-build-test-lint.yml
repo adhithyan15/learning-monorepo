@@ -14,9 +14,14 @@ jobs:
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: Set up Visual Studio Build Tools
         uses: ilammy/msvc-dev-cmd@v1
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
       - name: Installing necessary software and running the build script
         shell: pwsh
         run: |
+          choco install ruby
           go version
           choco install rust
           choco install llvm
