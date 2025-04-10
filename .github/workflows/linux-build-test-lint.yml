@@ -33,5 +33,5 @@ jobs:
       - run: sudo snap install powershell --classic
       - run: sudo gem install rspec
       - run: sudo npm install -g typescript
-      - run: curl -fsSL https://deno.land/install.sh | sh
+      - run: curl -fsSL https://deno.land/x/install/install.sh | sudo DENO_INSTALL=/usr/local sh
       - run: ruby code/programs/ruby/monorepo_build/build.rb
