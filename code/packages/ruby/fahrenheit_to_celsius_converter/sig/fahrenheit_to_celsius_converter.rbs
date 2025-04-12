@@ -1,0 +1,4 @@
+module FahrenheitToCelsiusConverter
+  VERSION: String
+  def convert_fahrenheit_to_celsius: (Numeric) -> Float
+end
