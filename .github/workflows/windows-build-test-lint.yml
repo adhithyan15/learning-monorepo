@@ -45,4 +45,5 @@ jobs:
           refreshenv
           lua -v
           npm install -g typescript
+          irm https://deno.land/install.ps1 | iex
           ruby code\programs\ruby\monorepo_build\build.rb
