@@ -34,4 +34,5 @@ jobs:
       - run: npm install -g typescript
       - run: curl -fsSL https://deno.land/x/install/install.sh | sudo DENO_INSTALL=/usr/local sh
       - run: gem install bundler
+      - run: curl -fsSL https://bun.sh/install | bash
       - run: ruby code/programs/ruby/monorepo_build/build.rb
