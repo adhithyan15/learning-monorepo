@@ -1,6 +1,6 @@
 cmake -B build-msvc -G "NMake Makefiles"
 cmake --build build-msvc
-build-msvc\bin-msvc\hello-world-msvc.exe
+build-msvc\bin-msvc\hello-msvc.exe
 cmake -B build-gcc -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc
 cmake --build build-gcc
 build-gcc\bin-gnu\hello-world-gnu.exe
