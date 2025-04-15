@@ -8,63 +8,115 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
       - name: Check out repository code
         uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - uses: ruby/setup-ruby@v1
+
+      - name: Set up Ruby with DevKit and Bundler Cache
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
+          ruby-version: 3.3
           bundler-cache: true
-      - run: go version
-      - run: choco install rust -y
-      - run: choco install llvm -y
-      - run: clang -v
-      - run: choco install mingw -y
-      - run: gcc --version
-      - run: choco install erlang -y
-      - run: choco install gnucobol -y
-      - run: choco install strawberryperl -y
-      - run: choco install haskell-dev -y
-      - run: choco install openjdk -y
-      - run: choco install zig -y
-      - run: dotnet --help
-      - run: choco install lua -y
-      - run: lua -v
-      - run: choco install r -y
-      - run: gem install rspec
-      - run: npm install -g typescript
-      - run: irm https://deno.land/install.ps1 | iex
-        shell: pwsh
-      - run: npm install -g bun
-      - name: Run build script
-        shell: cmd
+
+      # Single step for MSVC setup, All Installs, and Build
+      - name: Setup MSVC, Install All Deps, and Run Build
+        shell: cmd # Use cmd for the entire combined step
         run: |
+          @echo off
+
+          REM ----------------------------------
+          REM Stage 1: Setup MSVC Environment
+          REM ----------------------------------
+          echo Finding Visual Studio...
           for /f "usebackq tokens=*" %%i in (`vswhere -products * -requires Microsoft.Component.MSBuild -property installationPath -latest -nologo`) do set VSPATH=%%i
-          if not defined VSPATH (
-            echo ERROR: vswhere did not find VS.
-            exit /b 1
-          )
+          if not defined VSPATH (echo ERROR: vswhere did not find VS. & exit /b 1)
           echo Visual Studio path found at %VSPATH%
           set VCVARS_BAT="%VSPATH%\VC\Auxiliary\Build\vcvarsall.bat" 
-          if not exist %VCVARS_BAT% (
-            echo ERROR: vcvarsall.bat not found: %VCVARS_BAT%
-            exit /b 1
-          )
+          if not exist %VCVARS_BAT% (echo ERROR: vcvarsall.bat not found: %VCVARS_BAT% & exit /b 1)
+          
           echo Setting up MSVC environment using %VCVARS_BAT% for x64...
           call %VCVARS_BAT% x64 
-          if %ERRORLEVEL% neq 0 (
-            echo ERROR: vcvarsall.bat failed.
-            exit /b %ERRORLEVEL% 
-          )
-          echo MSVC Env OK.
+          if %ERRORLEVEL% neq 0 (echo ERROR: vcvarsall.bat failed. & exit /b %ERRORLEVEL%)
+          echo MSVC Env OK. Checking cl.exe...
+          where cl > nul 2>&1 || (echo ERROR: cl.exe not found after vcvarsall.bat & exit /b 1)
+          echo cl.exe found.
+
+          REM ----------------------------------
+          REM Stage 2: Install Dependencies
+          REM ----------------------------------
+          echo Installing development tools...
+
+          echo ==> Executing: go version
+          go version
+
+          echo ==> Executing: choco install rust -y
+          choco install rust -y || (echo ERROR: Failed choco install rust & exit /b %ERRORLEVEL%)
+
+          echo ==> Executing: choco install llvm -y
+          choco install llvm -y || (echo ERROR: Failed choco install llvm & exit /b %ERRORLEVEL%)
+          
+          echo ==> Executing: clang -v
+          clang -v || (echo WARNING: clang -v failed. & set CLANG_OK=0)
+
+          echo ==> Executing: choco install mingw -y
+          choco install mingw -y || (echo ERROR: Failed choco install mingw & exit /b %ERRORLEVEL%)
+
+          echo ==> Executing: gcc --version
+          gcc --version || (echo WARNING: gcc --version failed. & set GCC_OK=0)
+
+          echo ==> Executing: choco install erlang -y
+          choco install erlang -y || (echo ERROR: Failed choco install erlang & exit /b %ERRORLEVEL%)
+
+          echo ==> Executing: choco install gnucobol -y
+          choco install gnucobol -y || (echo ERROR: Failed choco install gnucobol & exit /b %ERRORLEVEL%)
+
+          echo ==> Executing: choco install strawberryperl -y
+          choco install strawberryperl -y || (echo ERROR: Failed choco install strawberryperl & exit /b %ERRORLEVEL%)
+
+          echo ==> Executing: choco install haskell-dev -y
+          choco install haskell-dev -y || (echo ERROR: Failed choco install haskell-dev & exit /b %ERRORLEVEL%)
+
+          echo ==> Executing: choco install openjdk -y
+          choco install openjdk -y || (echo ERROR: Failed choco install openjdk & exit /b %ERRORLEVEL%)
+
+          echo ==> Executing: choco install zig -y
+          choco install zig -y || (echo ERROR: Failed choco install zig & exit /b %ERRORLEVEL%)
+
+          echo ==> Executing: dotnet --help
+          dotnet --help
+
+          echo ==> Executing: choco install lua -y
+          choco install lua -y || (echo ERROR: Failed choco install lua & exit /b %ERRORLEVEL%)
+
+          echo ==> Executing: lua -v
+          lua -v || (echo WARNING: lua -v failed. & set LUA_OK=0)
+
+          echo ==> Executing: choco install r -y
+          choco install r -y || (echo ERROR: Failed choco install r & exit /b %ERRORLEVEL%)
+
+          echo ==> Executing: gem install rspec
+          gem install rspec || (echo ERROR: Failed gem install rspec & exit /b %ERRORLEVEL%)
+
+          echo ==> Executing: npm install -g typescript
+          npm install -g typescript || (echo ERROR: Failed npm install typescript & exit /b %ERRORLEVEL%)
+
+          echo ==> Executing: npm install -g deno
+          npm install -g deno || (echo ERROR: Failed npm install deno & exit /b %ERRORLEVEL%) 
+
+          echo ==> Executing: npm install -g bun
+          npm install -g bun || (echo ERROR: Failed npm install bun & exit /b %ERRORLEVEL%)
+
+          echo ==> Executing: cmake --version
+          cmake --version || (echo WARNING: cmake --version failed. & set CMAKE_OK=0)
+
+          echo Development tools installation complete.
+
+          REM ----------------------------------
+          REM Stage 3: Run Build Script
+          REM ----------------------------------
           echo Running build script...
           echo ==> Executing: ruby code\programs\ruby\monorepo_build\build.rb
           ruby code\programs\ruby\monorepo_build\build.rb
-          if %ERRORLEVEL% neq 0 (
-            echo ERROR: Build script failed with exit code %ERRORLEVEL%
-            exit /b %ERRORLEVEL%
-          )
+          if %ERRORLEVEL% neq 0 (echo ERROR: Build script failed with exit code %ERRORLEVEL% & exit /b %ERRORLEVEL%)
 
           echo Build completed successfully.
-          
