@@ -22,8 +22,6 @@ jobs:
       - name: Setup MSVC, Install All Deps, and Run Build
         shell: cmd # Use cmd for the entire combined step
         run: |
-          @echo off
-
           REM ----------------------------------
           REM Stage 1: Setup MSVC Environment
           REM ----------------------------------
