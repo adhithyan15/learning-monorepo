@@ -22,29 +22,27 @@ jobs:
         with:
           ruby-version: '3.3'
           bundler-cache: true
-      - name: Installing necessary software and running the build script
+      - run: go version
+      - run: choco install rust
+      - run: choco install llvm
+      - run: clang -v
+      - run: choco install mingw
+      - run: gcc --version
+      - run: choco install erlang
+      - run: choco install gnucobol
+      - run: choco install strawberryperl
+      - run: choco install haskell-dev
+      - run: choco install openjdk
+      - run: choco install zig
+      - run: dotnet --help
+      - run: choco install lua
+      - run: lua -v
+      - run: choco install r
+      - run: gem install rspec
+      - run: npm install -g typescript
+      - run: irm https://deno.land/install.ps1 | iex
         shell: pwsh
-        run: |
-          go version
-          choco install rust
-          choco install llvm
-          clang -v
-          choco install mingw
-          gcc --version
-          choco install erlang
-          choco install gnucobol
-          choco install strawberryperl
-          choco install haskell-dev
-          choco install openjdk
-          choco install zig
-          dotnet --help
-          choco install lua
-          choco install r
-          gem install rspec
-          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-          refreshenv
-          lua -v
-          npm install -g typescript
-          irm https://deno.land/install.ps1 | iex
-          npm install -g bun
-          ruby code\programs\ruby\monorepo_build\build.rb
+      - run: npm install -g bun
+      - name: Run Build Script
+        shell: pwsh
+        run: ruby code\programs\ruby\monorepo_build\build.rb
