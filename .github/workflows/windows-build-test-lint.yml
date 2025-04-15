@@ -39,7 +39,7 @@ jobs:
           # Find VS Path using PowerShell and vswhere
           $VsWhereArgs = "-products * -requires Microsoft.Component.MSBuild -property installationPath -latest -nologo"
           Write-Host "==> Executing: vswhere $VsWhereArgs"
-          $vsPath = vswhere $VsWhereArgs | Select-Object -First 1
+          $vsPath = vswhere $VsWhereArgs | Where-Object { $_ } | Select-Object -Last 1
           # Exit immediately if vswhere fails to find VS
           if (-not $vsPath) {
             Write-Error "FAIL FAST: vswhere.exe did not find a suitable Visual Studio installation path."
