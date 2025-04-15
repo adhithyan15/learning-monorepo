@@ -1,4 +1,4 @@
 cmake --clean-first
 cmake -B build
 cmake --build build
-.\build\hello.exe
+./build/hello

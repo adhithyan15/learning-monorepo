@@ -47,4 +47,5 @@ jobs:
           npm install -g typescript
           irm https://deno.land/install.ps1 | iex
           npm install -g bun
+          cmake --version
           ruby code\programs\ruby\monorepo_build\build.rb
