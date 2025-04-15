@@ -20,14 +20,52 @@ jobs:
         with:
           ruby-version: 3.3
 
-      - name: Setup MSVC environment
-        uses: microsoft/setup-msbuild@v2
-
-      - name: Scream Test for MSVC
+      - name: Compile with MSVC (Find VS, Setup Env, Run)
         run: |
-          echo "Attempting to compile with MSVC..."
-          cl /? # Simple test to see if cl.exe is found
-        shell: cmd
+          echo Finding Visual Studio...
+          
+          REM Use vswhere to find the latest VS install path with MSBuild and capture it
+          for /f "usebackq tokens=*" %%i in (`vswhere -products * -requires Microsoft.Component.MSBuild -property installationPath -latest -nologo`) do set VSPATH=%%i
+          
+          REM Check if VSPATH was set
+          if not defined VSPATH (
+            echo ERROR: vswhere.exe did not find a suitable Visual Studio installation path.
+            exit /b 1
+          )
+          
+          echo Visual Studio path found at %VSPATH%
+          
+          set VCVARS_BAT="%VSPATH%\VC\Auxiliary\Build\vcvarsall.bat"
+          echo VCVARSALL path is %VCVARS_BAT%
+  
+          REM Check if vcvarsall.bat exists
+          if not exist %VCVARS_BAT% (
+            echo ERROR: vcvarsall.bat not found at the expected location: %VCVARS_BAT%
+            exit /b 1
+          )
+  
+          echo Setting up MSVC environment using %VCVARS_BAT%...
+          REM Call vcvarsall.bat to set up the environment for x64 architecture
+          REM Adjust 'x64' to 'x86', 'x86_amd64', etc. if needed
+          call %VCVARS_BAT% x64 
+          
+          echo Checking if cl.exe is now in the PATH...
+          where cl
+          if %ERRORLEVEL% neq 0 (
+              echo ERROR: cl.exe not found in PATH after running vcvarsall.bat
+              echo Current PATH:
+              echo %PATH%
+              exit /b 1
+          )
+          
+          echo "--- Running PowerShell Build Script ---"
+          REM Now execute your PowerShell script or commands
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\my_build_script.ps1
+          
+          REM OR run inline PowerShell commands:
+          REM powershell -NoProfile -Command "& { Write-Host 'Testing cl via PowerShell:'; cl /? }"
+  
+        shell: cmd # Use cmd shell for vswhere capture and 'call'
 
       - name: Install dependencies and run recursive build
         shell: pwsh
