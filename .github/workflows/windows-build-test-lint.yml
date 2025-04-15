@@ -1,53 +1,75 @@
 name: Windows Build Test Lint
 run-name: Building and Testing changes on Windows 🚀
+
 on: [push]
+
 jobs:
   Windows-Build-Test-Lint:
     runs-on: windows-latest
+
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
       - name: Check out repository code
         uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+
       - name: Set up Ruby with DevKit
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.3
-      - name: Setup MSVC Compiler Environment
-        uses: TheMrMilchmann/setup-msvc-dev@v3
-        with:
-          arch: x64
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.3'
-          bundler-cache: true
-      - name: Installing necessary software and running the build script
+
+      - name: Install dependencies and run recursive build
         shell: pwsh
         run: |
+          # --------------------------
+          # Install dev tools
+          # --------------------------
           go version
-          choco install rust
-          choco install llvm
+          choco install rust -y
+          choco install llvm -y
           clang -v
-          choco install mingw
+          choco install mingw -y
           gcc --version
-          choco install erlang
-          choco install gnucobol
-          choco install strawberryperl
-          choco install haskell-dev
-          choco install openjdk
-          choco install zig
+          choco install erlang -y
+          choco install gnucobol -y
+          choco install strawberryperl -y
+          choco install haskell-dev -y
+          choco install openjdk -y
+          choco install zig -y
           dotnet --help
-          choco install lua
-          choco install r
+          choco install lua -y
+          choco install r -y
           gem install rspec
-          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-          refreshenv
-          lua -v
           npm install -g typescript
           irm https://deno.land/install.ps1 | iex
           npm install -g bun
-          cmake --version
+
+          # --------------------------
+          # Set up MSVC environment
+          # --------------------------
+          $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
+              -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+              -property installationPath
+
+          $vcvarsPath = Join-Path $vsPath "VC\Auxiliary\Build\vcvars64.bat"
+
+          Write-Host "Activating MSVC environment from: $vcvarsPath"
+
+          $vcvarsOutput = & cmd /c "`"$vcvarsPath`" >nul && set"
+
+          $vcvarsOutput | ForEach-Object {
+            $name, $value = $_ -split '=', 2
+            if ($name -and $value) {
+              [System.Environment]::SetEnvironmentVariable($name, $value, "Process")
+            }
+          }
+
+          # Confirm compiler is available
+          cl
+
+          # --------------------------
+          # Run monorepo build system
+          # --------------------------
           ruby code\programs\ruby\monorepo_build\build.rb
