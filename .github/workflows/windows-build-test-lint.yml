@@ -18,6 +18,8 @@ jobs:
           ruby-version: 3.3
       - name: Setup MSVC Compiler Environment
         uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
