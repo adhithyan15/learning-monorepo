@@ -20,6 +20,15 @@ jobs:
         with:
           ruby-version: 3.3
 
+      - name: Setup MSVC environment
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Scream Test for MSVC
+        run: |
+          echo "Attempting to compile with MSVC..."
+          cl /? # Simple test to see if cl.exe is found
+        shell: cmd
+
       - name: Install dependencies and run recursive build
         shell: pwsh
         run: |
@@ -46,35 +55,6 @@ jobs:
           irm https://deno.land/install.ps1 | iex
           npm install -g bun
           cmake --version
-
-          # --------------------------
-          # Set up MSVC environment dynamically
-          # --------------------------
-          $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
-              -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
-              -property installationPath
-
-          $vsDevCmd = Join-Path $vsPath "Common7\Tools\vsdevcmd.bat"
-          Write-Host "🛠 Using MSVC environment from: $vsDevCmd"
-
-          # Run vsdevcmd.bat and capture the full environment
-          $envDump = & cmd /c "`"$vsDevCmd`" -arch=x64 -host_arch=x64 >nul && set"
-
-          # Apply all environment variables to current PowerShell session
-          $envDump | ForEach-Object {
-            $name, $value = $_ -split '=', 2
-            if ($name -and $value) {
-              [System.Environment]::SetEnvironmentVariable($name, $value, "Process")
-            }
-          }
-
-          # Verify PATH includes expected Visual Studio paths
-          Write-Host "✅ PATH includes:"
-          $env:PATH -split ';' | Where-Object { $_ -match "Microsoft Visual Studio" } | ForEach-Object { Write-Host "`t$_" }
-
-          # Confirm cl.exe is available
-          Write-Host "🧪 Running: cl.exe /? (sanity check)"
-          & cl.exe /?
 
           # --------------------------
           # Run monorepo build system
