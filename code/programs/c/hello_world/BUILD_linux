@@ -1,6 +1,8 @@
+gcc --version
 cmake -B build-gcc -DCMAKE_C_COMPILER=gcc
 cmake --build build-gcc
-./build-gcc/hello
+./build-gcc/bin-gcc/hello-world-gcc
+clang --version
 cmake -B build-clang -DCMAKE_C_COMPILER=clang
 cmake --build build-clang
-./build-clang/hello
+./build-clang/bin-clang/hello-world-clang

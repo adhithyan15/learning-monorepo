@@ -1,6 +1,8 @@
-cmake -B build-gcc -DCMAKE_C_COMPILER=gcc
-cmake --build build-gcc
-./build-gcc/hello
+clang --version
 cmake -B build-apple
 cmake --build build-apple
-./build-apple/hello
+./build-apple/bin-appleclang/hello-world-appleclang
+gcc --version
+cmake -B build-gcc -DCMAKE_C_COMPILER=$(which gcc)
+cmake --build build-gcc
+./build-gcc/bin-gnu/hello-world-gnu

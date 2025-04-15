@@ -1,3 +1,9 @@
 cmake -B build-msvc -G "NMake Makefiles"
 cmake --build build-msvc
-build-msvc\hello_world.exe
+build-msvc\bin-msvc\hello-world-msvc.exe
+cmake -B build-gcc -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc
+cmake --build build-gcc
+build-gcc\bin-gnu\hello-world-gnu.exe
+cmake -B build-clang -G "MinGW Makefiles" -DCMAKE_C_COMPILER=clang
+cmake --build build-clang
+build-clang\bin-clang\hello-world-clang.exe
