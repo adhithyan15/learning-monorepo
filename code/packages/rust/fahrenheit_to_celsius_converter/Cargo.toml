@@ -1,0 +1,14 @@
+[package]
+name = "fahrenheit_to_celsius_converter"
+version = "0.1.0"
+edition = "2021"
+authors = ["Adhithya Rajasekaran <your@email.com>"]
+description = "Converts Fahrenheit to Celsius. Simple, portable, and FFI-ready."
+license = "MIT"
+repository = "https://github.com/adhithyan15/learning-monorepo"
+readme = "README.md"
+keywords = ["temperature"]
+categories = ["science"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]  # rlib = Rust native; cdylib = FFI compatible
