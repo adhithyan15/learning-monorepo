@@ -48,64 +48,64 @@ jobs:
           go version
 
           echo ==> Executing: choco install rust -y
-          choco install rust -y || (echo ERROR: Failed choco install rust & exit /b %ERRORLEVEL%)
+          choco install rust -y
 
           echo ==> Executing: choco install llvm -y
-          choco install llvm -y || (echo ERROR: Failed choco install llvm & exit /b %ERRORLEVEL%)
+          choco install llvm -y
           
           echo ==> Executing: clang -v
-          clang -v || (echo WARNING: clang -v failed. & set CLANG_OK=0)
+          clang -v
 
           echo ==> Executing: choco install mingw -y
-          choco install mingw -y || (echo ERROR: Failed choco install mingw & exit /b %ERRORLEVEL%)
+          choco install mingw -y
 
           echo ==> Executing: gcc --version
-          gcc --version || (echo WARNING: gcc --version failed. & set GCC_OK=0)
+          gcc --version
 
           echo ==> Executing: choco install erlang -y
-          choco install erlang -y || (echo ERROR: Failed choco install erlang & exit /b %ERRORLEVEL%)
+          choco install erlang -y
 
           echo ==> Executing: choco install gnucobol -y
-          choco install gnucobol -y || (echo ERROR: Failed choco install gnucobol & exit /b %ERRORLEVEL%)
+          choco install gnucobol -y
 
           echo ==> Executing: choco install strawberryperl -y
-          choco install strawberryperl -y || (echo ERROR: Failed choco install strawberryperl & exit /b %ERRORLEVEL%)
+          choco install strawberryperl -y
 
           echo ==> Executing: choco install haskell-dev -y
-          choco install haskell-dev -y || (echo ERROR: Failed choco install haskell-dev & exit /b %ERRORLEVEL%)
+          choco install haskell-dev -y
 
           echo ==> Executing: choco install openjdk -y
-          choco install openjdk -y || (echo ERROR: Failed choco install openjdk & exit /b %ERRORLEVEL%)
+          choco install openjdk -y
 
           echo ==> Executing: choco install zig -y
-          choco install zig -y || (echo ERROR: Failed choco install zig & exit /b %ERRORLEVEL%)
+          choco install zig -y
 
           echo ==> Executing: dotnet --help
           dotnet --help
 
           echo ==> Executing: choco install lua -y
-          choco install lua -y || (echo ERROR: Failed choco install lua & exit /b %ERRORLEVEL%)
+          choco install lua -y
 
           echo ==> Executing: lua -v
-          lua -v || (echo WARNING: lua -v failed. & set LUA_OK=0)
+          lua -v
 
           echo ==> Executing: choco install r -y
-          choco install r -y || (echo ERROR: Failed choco install r & exit /b %ERRORLEVEL%)
+          choco install r -y
 
           echo ==> Executing: gem install rspec
-          gem install rspec || (echo ERROR: Failed gem install rspec & exit /b %ERRORLEVEL%)
+          gem install rspec
 
           echo ==> Executing: npm install -g typescript
-          npm install -g typescript || (echo ERROR: Failed npm install typescript & exit /b %ERRORLEVEL%)
+          npm install -g typescript
 
           echo ==> Executing: npm install -g deno
-          npm install -g deno || (echo ERROR: Failed npm install deno & exit /b %ERRORLEVEL%) 
+          npm install -g deno
 
           echo ==> Executing: npm install -g bun
-          npm install -g bun || (echo ERROR: Failed npm install bun & exit /b %ERRORLEVEL%)
+          npm install -g bun
 
           echo ==> Executing: cmake --version
-          cmake --version || (echo WARNING: cmake --version failed. & set CMAKE_OK=0)
+          cmake --version
 
           echo Development tools installation complete.
 
