@@ -9,8 +9,8 @@ jobs:
 
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - run: echo "🪟 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The branch is ${{ github.ref }} from ${{ github.repository }}."
 
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -45,31 +45,33 @@ jobs:
           npm install -g typescript
           irm https://deno.land/install.ps1 | iex
           npm install -g bun
+          cmake --version
 
           # --------------------------
-          # Set up MSVC environment
+          # Set up MSVC environment dynamically
           # --------------------------
           $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
               -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
               -property installationPath
 
-          $vcvarsPath = Join-Path $vsPath "VC\Auxiliary\Build\vcvars64.bat"
+          $vsDevCmdPath = Join-Path $vsPath "Common7\Tools\vsdevcmd.bat"
+          Write-Host "🛠 Using MSVC environment from: $vsDevCmdPath"
 
-          Write-Host "Activating MSVC environment from: $vcvarsPath"
+          # Load MSVC env into PowerShell session
+          $envDump = & cmd /c "`"$vsDevCmdPath`" -arch=x64 -host_arch=x64 >nul && set"
 
-          $vcvarsOutput = & cmd /c "`"$vcvarsPath`" >nul && set"
-
-          $vcvarsOutput | ForEach-Object {
+          $envDump | ForEach-Object {
             $name, $value = $_ -split '=', 2
             if ($name -and $value) {
               [System.Environment]::SetEnvironmentVariable($name, $value, "Process")
             }
           }
 
-          # Confirm compiler is available
-          cl
+          # Confirm compiler is now available
+          Write-Host "🧪 Checking for cl.exe..."
+          Get-Command cl
 
           # --------------------------
-          # Run monorepo build system
+          # Run your recursive build system
           # --------------------------
           ruby code\programs\ruby\monorepo_build\build.rb
