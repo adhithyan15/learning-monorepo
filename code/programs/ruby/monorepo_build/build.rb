@@ -4,6 +4,8 @@ require 'set' # Used for tracking processed DIRS files to prevent infinite loops
 puts "[INFO] Starting the build process..."
 
 # --- Configuration ---
+STDOUT.sync = true
+STDERR.sync = true
 BUILD_FILE_PATTERN = /^BUILD(?:_windows|_mac_and_linux|_mac|_linux)?$/
 DIRS_FILE_NAME = "DIRS"
 BUILD_COMMENT_CHAR = '#'

@@ -144,17 +144,20 @@ jobs:
           # and then immediately runs the build command in sequence using '&&'
           $cmdCommand = 'call "' + $vcvarsPath + '" ' + $arch + ' && ' + $buildCommand
           
-          # Log the command that will be passed to cmd /c for execution
-          Write-Host "==> Executing via cmd /c: $cmdCommand" 
-          # Execute the combined command using cmd /c 
+          # Log the command that will be passed to cmd /c
+          Write-Host "==> Executing via cmd /c: $cmdCommand"
+          # Execute using cmd /c
           cmd /c "$cmdCommand"
-          
-          # Check the exit code from the cmd /c execution
-          if ($LASTEXITCODE -ne 0) {
-            # If the exit code is non-zero, report an error and exit the step with the same code
-            Write-Error "Build command failed with exit code $LASTEXITCODE"
-            exit $LASTEXITCODE 
+
+          # --- Debugging: Log LASTEXITCODE unconditionally ---
+          $CmdExitCode = $LASTEXITCODE
+          Write-Host "[DEBUG] 'cmd /c' finished with exit code: $CmdExitCode"
+          # ----------------------------------------------------
+
+          # Check the captured exit code from cmd
+          if ($CmdExitCode -ne 0) {
+            Write-Error "Build command failed with exit code $CmdExitCode"
+            exit $CmdExitCode # Propagate the error code
           } else {
-            # If the exit code is zero, report success
             Write-Host "Build completed successfully."
           }
