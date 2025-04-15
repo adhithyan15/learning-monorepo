@@ -54,12 +54,13 @@ jobs:
               -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
               -property installationPath
 
-          $vsDevCmdPath = Join-Path $vsPath "Common7\Tools\vsdevcmd.bat"
-          Write-Host "🛠 Using MSVC environment from: $vsDevCmdPath"
+          $vsDevCmd = Join-Path $vsPath "Common7\Tools\vsdevcmd.bat"
+          Write-Host "🛠 Using MSVC environment from: $vsDevCmd"
 
-          # Load MSVC env into PowerShell session
-          $envDump = & cmd /c "`"$vsDevCmdPath`" -arch=x64 -host_arch=x64 >nul && set"
+          # Run vsdevcmd.bat and capture the full environment
+          $envDump = & cmd /c "`"$vsDevCmd`" -arch=x64 -host_arch=x64 >nul && set"
 
+          # Apply all environment variables to current PowerShell session
           $envDump | ForEach-Object {
             $name, $value = $_ -split '=', 2
             if ($name -and $value) {
@@ -67,11 +68,15 @@ jobs:
             }
           }
 
-          # Confirm compiler is now available
-          Write-Host "🧪 Checking for cl.exe..."
-          Get-Command cl
+          # Verify PATH includes expected Visual Studio paths
+          Write-Host "✅ PATH includes:"
+          $env:PATH -split ';' | Where-Object { $_ -match "Microsoft Visual Studio" } | ForEach-Object { Write-Host "`t$_" }
+
+          # Confirm cl.exe is available
+          Write-Host "🧪 Running: cl.exe /? (sanity check)"
+          & cl.exe /?
 
           # --------------------------
-          # Run your recursive build system
+          # Run monorepo build system
           # --------------------------
           ruby code\programs\ruby\monorepo_build\build.rb
