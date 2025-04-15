@@ -46,4 +46,5 @@ jobs:
           lua -v
           npm install -g typescript
           irm https://deno.land/install.ps1 | iex
+          npm install -g bun
           ruby code\programs\ruby\monorepo_build\build.rb
