@@ -40,5 +40,31 @@ jobs:
       - name: Run build script
         shell: cmd
         run: |
-          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          for /f "usebackq tokens=*" %%i in (`vswhere -products * -requires Microsoft.Component.MSBuild -property installationPath -latest -nologo`) do set VSPATH=%%i
+          if not defined VSPATH (
+            echo ERROR: vswhere did not find VS.
+            exit /b 1
+          )
+          echo Visual Studio path found at %VSPATH%
+          set VCVARS_BAT="%VSPATH%\VC\Auxiliary\Build\vcvarsall.bat" 
+          if not exist %VCVARS_BAT% (
+            echo ERROR: vcvarsall.bat not found: %VCVARS_BAT%
+            exit /b 1
+          )
+          echo Setting up MSVC environment using %VCVARS_BAT% for x64...
+          call %VCVARS_BAT% x64 
+          if %ERRORLEVEL% neq 0 (
+            echo ERROR: vcvarsall.bat failed.
+            exit /b %ERRORLEVEL% 
+          )
+          echo MSVC Env OK.
+          echo Running build script...
+          echo ==> Executing: ruby code\programs\ruby\monorepo_build\build.rb
           ruby code\programs\ruby\monorepo_build\build.rb
+          if %ERRORLEVEL% neq 0 (
+            echo ERROR: Build script failed with exit code %ERRORLEVEL%
+            exit /b %ERRORLEVEL%
+          )
+
+          echo Build completed successfully.
+          
