@@ -22,110 +22,41 @@ jobs:
       - name: Setup MSVC, Install All Deps, and Run Build
         shell: cmd # Use cmd for the entire combined step
         run: |
-          REM ----------------------------------
-          REM Stage 1: Setup MSVC Environment
-          REM ----------------------------------
-          echo Finding Visual Studio...
           for /f "usebackq tokens=*" %%i in (`vswhere -products * -requires Microsoft.Component.MSBuild -property installationPath -latest -nologo`) do set VSPATH=%%i
           if not defined VSPATH (echo ERROR: vswhere did not find VS. & exit /b 1)
-          echo Visual Studio path found at %VSPATH%
           set VCVARS_BAT="%VSPATH%\VC\Auxiliary\Build\vcvarsall.bat" 
-          if not exist %VCVARS_BAT% (echo ERROR: vcvarsall.bat not found: %VCVARS_BAT% & exit /b 1)
-          
-          echo Setting up MSVC environment using %VCVARS_BAT% for x64...
           call %VCVARS_BAT% x64 
-          if %ERRORLEVEL% neq 0 (echo ERROR: vcvarsall.bat failed. & exit /b %ERRORLEVEL%)
-          echo MSVC Env OK. Checking cl.exe...
-          where cl > nul 2>&1 || (echo ERROR: cl.exe not found after vcvarsall.bat & exit /b 1)
-          echo cl.exe found.
-
-          REM ----------------------------------
-          REM Stage 2: Install Dependencies
-          REM ----------------------------------
-          echo Installing development tools...
-
-          echo ==> Executing: go version
+          where cl > nul 2>&1
           go version
-
-          echo ==> Executing: choco install rust -y
-          choco install rust -y
+          choco install rust
           refreshenv
-
-          echo ==> Executing: choco install llvm -y
-          choco install llvm -y
+          choco install llvm
           refreshenv
-          
-          echo ==> Executing: clang -v
           clang -v
-
-          echo ==> Executing: choco install mingw -y
-          choco install mingw -y
+          choco install mingw
           refreshenv
-
-          echo ==> Executing: gcc --version
           gcc --version
-
-          echo ==> Executing: choco install erlang -y
-          choco install erlang -y
+          choco install erlang
           refreshenv
-
-          echo ==> Executing: choco install gnucobol -y
-          choco install gnucobol -y
+          choco install gnucobol
           refreshenv
-
-          echo ==> Executing: choco install strawberryperl -y
-          choco install strawberryperl -y
+          choco install strawberryperl
           refreshenv
-
-          echo ==> Executing: choco install haskell-dev -y
-          choco install haskell-dev -y
+          choco install haskell-dev
           refreshenv
-
-          echo ==> Executing: choco install openjdk -y
-          choco install openjdk -y
+          choco install openjdk
           refreshenv
-
-          echo ==> Executing: choco install zig -y
-          choco install zig -y
+          choco install zig
           refreshenv
-
-          echo ==> Executing: dotnet --help
           dotnet --help
-
-          echo ==> Executing: choco install lua -y
-          choco install lua -y
+          choco install lua
           refreshenv
-
-          echo ==> Executing: lua -v
           lua -v
-
-          echo ==> Executing: choco install r -y
-          choco install r -y
+          choco install r
           refreshenv
-
-          echo ==> Executing: gem install rspec
           gem install rspec
-
-          echo ==> Executing: npm install -g typescript
           npm install -g typescript
-
-          echo ==> Executing: npm install -g deno
           npm install -g deno
-
-          echo ==> Executing: npm install -g bun
           npm install -g bun
-
-          echo ==> Executing: cmake --version
           cmake --version
-
-          echo Development tools installation complete.
-
-          REM ----------------------------------
-          REM Stage 3: Run Build Script
-          REM ----------------------------------
-          echo Running build script...
-          echo ==> Executing: ruby code\programs\ruby\monorepo_build\build.rb
           ruby code\programs\ruby\monorepo_build\build.rb
-          if %ERRORLEVEL% neq 0 (echo ERROR: Build script failed with exit code %ERRORLEVEL% & exit /b %ERRORLEVEL%)
-
-          echo Build completed successfully.
