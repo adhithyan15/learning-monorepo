@@ -1,0 +1,6 @@
+cmake -B build-gcc -DCMAKE_C_COMPILER=gcc
+cmake --build build-gcc
+./build-gcc/hello
+cmake -B build-apple
+cmake --build build-apple
+./build-apple/hello
