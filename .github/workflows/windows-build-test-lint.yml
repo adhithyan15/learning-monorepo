@@ -49,48 +49,59 @@ jobs:
 
           echo ==> Executing: choco install rust -y
           choco install rust -y
+          refreshenv
 
           echo ==> Executing: choco install llvm -y
           choco install llvm -y
+          refreshenv
           
           echo ==> Executing: clang -v
           clang -v
 
           echo ==> Executing: choco install mingw -y
           choco install mingw -y
+          refreshenv
 
           echo ==> Executing: gcc --version
           gcc --version
 
           echo ==> Executing: choco install erlang -y
           choco install erlang -y
+          refreshenv
 
           echo ==> Executing: choco install gnucobol -y
           choco install gnucobol -y
+          refreshenv
 
           echo ==> Executing: choco install strawberryperl -y
           choco install strawberryperl -y
+          refreshenv
 
           echo ==> Executing: choco install haskell-dev -y
           choco install haskell-dev -y
+          refreshenv
 
           echo ==> Executing: choco install openjdk -y
           choco install openjdk -y
+          refreshenv
 
           echo ==> Executing: choco install zig -y
           choco install zig -y
+          refreshenv
 
           echo ==> Executing: dotnet --help
           dotnet --help
 
           echo ==> Executing: choco install lua -y
           choco install lua -y
+          refreshenv
 
           echo ==> Executing: lua -v
           lua -v
 
           echo ==> Executing: choco install r -y
           choco install r -y
+          refreshenv
 
           echo ==> Executing: gem install rspec
           gem install rspec
