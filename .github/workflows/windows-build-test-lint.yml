@@ -34,7 +34,6 @@ jobs:
           dotnet --help
           choco install lua
           choco install r
-          gem install rspec
           Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
           refreshenv
           lua -v
