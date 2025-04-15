@@ -1,100 +1,157 @@
 name: Windows Build Test Lint
 run-name: Building and Testing changes on Windows 🚀
 
+# Trigger the workflow on push events
 on: [push]
 
 jobs:
   Windows-Build-Test-Lint:
+    # Use the latest Windows runner provided by GitHub Actions
     runs-on: windows-latest
 
     steps:
+      # Informational steps about the trigger and runner
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🪟 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The branch is ${{ github.ref }} from ${{ github.repository }}."
 
+      # Check out the repository code to the runner
       - name: Check out repository code
         uses: actions/checkout@v4
 
+      # Set up Ruby using the official action, including DevKit for native extensions
       - name: Set up Ruby with DevKit
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
+          ruby-version: 3.3 # Specify your desired Ruby version
 
-      - name: Compile with MSVC (Find VS, Setup Env, Run)
+      # Main step to install dependencies, check/setup MSVC, and run the build
+      - name: Install dependencies, Check/Setup MSVC Env, and Run Build
+        # Use PowerShell as the shell for the main logic
+        shell: pwsh 
+        # The script block containing all logic for this step
         run: |
-          echo Finding Visual Studio...
+          # ----------------------------------------------------
+          # Check for MSVC Prerequisites (Fail Fast)
+          # ----------------------------------------------------
+          Write-Host "Checking for MSVC prerequisites..."
           
-          REM Use vswhere to find the latest VS install path with MSBuild and capture it
-          for /f "usebackq tokens=*" %%i in (`vswhere -products * -requires Microsoft.Component.MSBuild -property installationPath -latest -nologo`) do set VSPATH=%%i
+          # Find VS Path using PowerShell and vswhere
+          $VsWhereArgs = "-products * -requires Microsoft.Component.MSBuild -property installationPath -latest -nologo"
+          Write-Host "==> Executing: vswhere $VsWhereArgs"
+          $vsPath = vswhere $VsWhereArgs | Select-Object -First 1
+          # Exit immediately if vswhere fails to find VS
+          if (-not $vsPath) {
+            Write-Error "FAIL FAST: vswhere.exe did not find a suitable Visual Studio installation path."
+            exit 1 
+          }
+          Write-Host "Visual Studio path found at $vsPath"
           
-          REM Check if VSPATH was set
-          if not defined VSPATH (
-            echo ERROR: vswhere.exe did not find a suitable Visual Studio installation path.
-            exit /b 1
-          )
+          # Construct the expected path to vcvarsall.bat
+          $vcvarsPath = Join-Path $vsPath "VC\Auxiliary\Build\vcvarsall.bat"
+          Write-Host "==> Checking path existence for: $vcvarsPath"
+          # Exit immediately if vcvarsall.bat is not found
+          if (-not (Test-Path $vcvarsPath)) {
+            Write-Error "FAIL FAST: vcvarsall.bat not found at the expected location: $vcvarsPath"
+            exit 1 
+          }
+          Write-Host "VCVARSALL path confirmed: $vcvarsPath"
+          Write-Host "MSVC prerequisites check passed. Proceeding with installations."
           
-          echo Visual Studio path found at %VSPATH%
-          
-          set VCVARS_BAT="%VSPATH%\VC\Auxiliary\Build\vcvarsall.bat"
-          echo VCVARSALL path is %VCVARS_BAT%
-  
-          REM Check if vcvarsall.bat exists
-          if not exist %VCVARS_BAT% (
-            echo ERROR: vcvarsall.bat not found at the expected location: %VCVARS_BAT%
-            exit /b 1
-          )
-  
-          echo Setting up MSVC environment using %VCVARS_BAT%...
-          REM Call vcvarsall.bat to set up the environment for x64 architecture
-          REM Adjust 'x64' to 'x86', 'x86_amd64', etc. if needed
-          call %VCVARS_BAT% x64 
-          
-          echo Checking if cl.exe is now in the PATH...
-          where cl
-          if %ERRORLEVEL% neq 0 (
-              echo ERROR: cl.exe not found in PATH after running vcvarsall.bat
-              echo Current PATH:
-              echo %PATH%
-              exit /b 1
-          )
-          
-          echo "--- Running PowerShell Build Script ---"
-          REM Now execute your PowerShell script or commands
-          powershell -NoProfile -ExecutionPolicy Bypass -File .\my_build_script.ps1
-          
-          REM OR run inline PowerShell commands:
-          REM powershell -NoProfile -Command "& { Write-Host 'Testing cl via PowerShell:'; cl /? }"
-  
-        shell: cmd # Use cmd shell for vswhere capture and 'call'
+          # Define architecture needed later (used when calling vcvarsall)
+          $arch = "x64" # Change to 'x86' or other values if needed
 
-      - name: Install dependencies and run recursive build
-        shell: pwsh
-        run: |
           # --------------------------
-          # Install dev tools
+          # Install development tools (Only runs if MSVC checks passed)
           # --------------------------
+          Write-Host "Installing development tools..."
+          
+          Write-Host "==> Executing: go version"
           go version
+          
+          Write-Host "==> Executing: choco install rust -y"
           choco install rust -y
+          
+          Write-Host "==> Executing: choco install llvm -y"
           choco install llvm -y
+          
+          Write-Host "==> Executing: clang -v"
           clang -v
+          
+          Write-Host "==> Executing: choco install mingw -y"
           choco install mingw -y
+          
+          Write-Host "==> Executing: gcc --version"
           gcc --version
+          
+          Write-Host "==> Executing: choco install erlang -y"
           choco install erlang -y
+          
+          Write-Host "==> Executing: choco install gnucobol -y"
           choco install gnucobol -y
+          
+          Write-Host "==> Executing: choco install strawberryperl -y"
           choco install strawberryperl -y
+          
+          Write-Host "==> Executing: choco install haskell-dev -y"
           choco install haskell-dev -y
+          
+          Write-Host "==> Executing: choco install openjdk -y"
           choco install openjdk -y
+          
+          Write-Host "==> Executing: choco install zig -y"
           choco install zig -y
+          
+          Write-Host "==> Executing: dotnet --help"
           dotnet --help
+          
+          Write-Host "==> Executing: choco install lua -y"
           choco install lua -y
+          
+          Write-Host "==> Executing: choco install r -y"
           choco install r -y
+          
+          Write-Host "==> Executing: gem install rspec"
           gem install rspec
+          
+          Write-Host "==> Executing: npm install -g typescript"
           npm install -g typescript
-          irm https://deno.land/install.ps1 | iex
+          
+          Write-Host "==> Executing: irm https://deno.land/install.ps1 | iex"
+          # Invoke-RestMethod followed by Invoke-Expression to install Deno
+          irm https://deno.land/install.ps1 | iex 
+          
+          Write-Host "==> Executing: npm install -g bun"
           npm install -g bun
+          
+          Write-Host "==> Executing: cmake --version"
           cmake --version
+          
+          Write-Host "Development tools installation complete."
+          
+          # ----------------------------------------------------
+          # Run Build within MSVC Env (using info checked earlier)
+          # ----------------------------------------------------
+          Write-Host "Setting up MSVC environment and running build..."
+          # Define the final build command (your Ruby script)
+          $buildCommand = "ruby code\programs\ruby\monorepo_build\build.rb"
 
-          # --------------------------
-          # Run monorepo build system
-          # --------------------------
-          ruby code\programs\ruby\monorepo_build\build.rb
+          # Construct the command string to run within cmd.exe
+          # This calls vcvarsall.bat (using the path checked earlier) 
+          # and then immediately runs the build command in sequence using '&&'
+          $cmdCommand = 'call "' + $vcvarsPath + '" ' + $arch + ' && ' + $buildCommand
+          
+          # Log the command that will be passed to cmd /c for execution
+          Write-Host "==> Executing via cmd /c: $cmdCommand" 
+          # Execute the combined command using cmd /c 
+          cmd /c "$cmdCommand"
+          
+          # Check the exit code from the cmd /c execution
+          if ($LASTEXITCODE -ne 0) {
+            # If the exit code is non-zero, report an error and exit the step with the same code
+            Write-Error "Build command failed with exit code $LASTEXITCODE"
+            exit $LASTEXITCODE 
+          } else {
+            # If the exit code is zero, report success
+            Write-Host "Build completed successfully."
+          }
