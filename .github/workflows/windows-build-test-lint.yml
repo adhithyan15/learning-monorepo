@@ -26,34 +26,23 @@ jobs:
           if not defined VSPATH (echo ERROR: vswhere did not find VS. & exit /b 1)
           set VCVARS_BAT="%VSPATH%\VC\Auxiliary\Build\vcvarsall.bat" 
           call %VCVARS_BAT% x64 
-          where cl > nul 2>&1
+          cl
           go version
           choco install rust
-          refreshenv
           choco install llvm
-          refreshenv
           clang -v
           choco install mingw
-          refreshenv
           gcc --version
           choco install erlang
-          refreshenv
           choco install gnucobol
-          refreshenv
           choco install strawberryperl
-          refreshenv
           choco install haskell-dev
-          refreshenv
           choco install openjdk
-          refreshenv
           choco install zig
-          refreshenv
           dotnet --help
           choco install lua
-          refreshenv
           lua -v
           choco install r
-          refreshenv
           gem install rspec
           npm install -g typescript
           npm install -g deno
