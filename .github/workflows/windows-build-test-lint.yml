@@ -28,7 +28,7 @@ jobs:
       # Main step to install dependencies, check/setup MSVC, and run the build
       - name: Install dependencies, Check/Setup MSVC Env, and Run Build
         # Use PowerShell as the shell for the main logic
-        shell: pwsh 
+        shell: pwsh
         # The script block containing all logic for this step
         run: |
           # ----------------------------------------------------
@@ -36,18 +36,21 @@ jobs:
           # ----------------------------------------------------
           Write-Host "Checking for MSVC prerequisites..."
           
-          # Find VS Path using PowerShell and vswhere
-          $VsWhereArgs = "-products * -requires Microsoft.Component.MSBuild -property installationPath -latest -nologo"
-          Write-Host "==> Executing: vswhere $VsWhereArgs"
-          $vsPath = vswhere $VsWhereArgs | Where-Object { $_ } | Select-Object -Last 1
-          # Exit immediately if vswhere fails to find VS
-          if (-not $vsPath) {
-            Write-Error "FAIL FAST: vswhere.exe did not find a suitable Visual Studio installation path."
-            exit 1 
+          # Find VS Path using PowerShell
+          # Define the arguments clearly for logging (optional but good practice)
+          $VsWhereArguments = "-products * -requires Microsoft.Component.MSBuild -property installationPath -latest -nologo"
+          Write-Host "==> Executing: vswhere $VsWhereArguments"
+          # Call vswhere directly with arguments separated
+          $vsPath = vswhere -products * -requires Microsoft.Component.MSBuild -property installationPath -latest -nologo | Where-Object { $_ } | Select-Object -Last 1 
+          
+          # Check if vswhere returned a valid-looking path (e.g., starting with DriveLetter:\)
+          if (-not $vsPath -or $vsPath -notlike "?:\*") { 
+            Write-Error "FAIL FAST: vswhere.exe did not return a valid installation path. Output was: '$vsPath'"
+            exit 1 # Fail Fast
           }
           Write-Host "Visual Studio path found at $vsPath"
           
-          # Construct the expected path to vcvarsall.bat
+          # Construct and Check vcvarsall.bat path
           $vcvarsPath = Join-Path $vsPath "VC\Auxiliary\Build\vcvarsall.bat"
           Write-Host "==> Checking path existence for: $vcvarsPath"
           # Exit immediately if vcvarsall.bat is not found
