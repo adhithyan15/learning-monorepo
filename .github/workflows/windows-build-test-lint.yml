@@ -34,7 +34,6 @@ jobs:
           dotnet --help
           choco install lua
           choco install r
-          refreshenv
           lua -v
           npm install -g typescript
           npm install -g deno
