@@ -1,7 +1,7 @@
 python3 -m venv .venv --copies
 . .venv/bin/activate
 pip install -e .[dev]
-pytest -v
+python tests/test_core.py
 ruff check .
 mypy src
 pip install build

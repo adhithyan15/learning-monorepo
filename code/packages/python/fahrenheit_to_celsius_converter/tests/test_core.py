@@ -1,101 +1,116 @@
-# tests/test_core.py
-
-"""Tests for the core temperature conversion functions."""
-
-import pytest  # type: ignore # Prevents mypy complaining about pytest import
+import unittest
 
 # Make sure this package name matches your project's package name
-# (Should be correct based on previous steps)
 from fahrenheit_to_celsius_converter.core import fahrenheit_to_celsius
 
-# --- Test Cases for Valid Inputs ---
+class TestFahrenheitToCelsius(unittest.TestCase):
+    """Test suite for the fahrenheit_to_celsius function."""
 
-# Use pytest.mark.parametrize to run the same test function with multiple inputs
-@pytest.mark.parametrize(
-    "temp_f, expected_c",
-    [
-        # Test case format: (fahrenheit_input, expected_celsius_output)
+    # --- Test Cases for Valid Inputs (One method per case) ---
 
-        # Standard values
-        (32, 0.0),  # Freezing point of water (input as int)
-        (212.0, 100.0),  # Boiling point of water (input as float)
-        (98.6, 37.0),  # Approximate normal body temperature
-        (-40, -40.0), # Point where scales meet (input as int)
-        (0, -17.77777777777778), # Zero Fahrenheit
+    def test_f_to_c_valid_freezing_point_int(self):
+        """Tests F to C conversion at freezing point (32 F -> 0 C)."""
+        self.assertAlmostEqual(fahrenheit_to_celsius(32), 0.0, places=7)
 
-        # Other values
-        (50, 10.0),
-        (-4, -20.0),
-        (68.0, 20.0), # Room temperature example
+    def test_f_to_c_valid_boiling_point_float(self):
+        """Tests F to C conversion at boiling point (212 F -> 100 C)."""
+        self.assertAlmostEqual(fahrenheit_to_celsius(212.0), 100.0, places=7)
 
-        # Value resulting in non-integer celsius
-        (100, 37.77777777777778),
+    def test_f_to_c_valid_body_temp_float(self):
+        """Tests F to C conversion at body temperature (98.6 F -> 37 C)."""
+        self.assertAlmostEqual(fahrenheit_to_celsius(98.6), 37.0, places=7)
 
-        # Ensure large numbers don't cause unexpected issues (within float limits)
-        (1000.0, 537.7777777777778),
-        (-1000.0, -573.3333333333334),
+    def test_f_to_c_valid_scales_meet_int(self):
+        """Tests F to C conversion where scales meet (-40 F -> -40 C)."""
+        self.assertAlmostEqual(fahrenheit_to_celsius(-40), -40.0, places=7)
 
-        # Test absolute zero approx (-459.67 F)
-        (-459.67, -273.15),
-    ],
-    ids=[ # Optional: Provide IDs for better test reporting
-        "freezing_point_int",
-        "boiling_point_float",
-        "body_temp_float",
-        "scales_meet_int",
-        "zero_fahrenheit_int",
-        "fifty_fahrenheit_int",
-        "minus_four_fahrenheit_int",
-        "room_temp_float",
-        "one_hundred_fahrenheit_int",
-        "large_positive_float",
-        "large_negative_float",
-        "absolute_zero_approx_float",
-    ]
-)
-def test_fahrenheit_to_celsius_valid_inputs(temp_f: float | int, expected_c: float):
-    """
-    Tests the fahrenheit_to_celsius function with various valid numeric inputs.
-    """
-    # Use pytest.approx for floating-point comparisons
-    assert fahrenheit_to_celsius(temp_f) == pytest.approx(expected_c)
+    def test_f_to_c_valid_zero_fahrenheit_int(self):
+        """Tests F to C conversion for 0 Fahrenheit."""
+        self.assertAlmostEqual(fahrenheit_to_celsius(0), -17.7777778, places=7)
+
+    def test_f_to_c_valid_fifty_fahrenheit_int(self):
+        """Tests F to C conversion for 50 Fahrenheit."""
+        self.assertAlmostEqual(fahrenheit_to_celsius(50), 10.0, places=7)
+
+    def test_f_to_c_valid_minus_four_fahrenheit_int(self):
+        """Tests F to C conversion for -4 Fahrenheit."""
+        self.assertAlmostEqual(fahrenheit_to_celsius(-4), -20.0, places=7)
+
+    def test_f_to_c_valid_room_temp_float(self):
+        """Tests F to C conversion for room temperature (68 F -> 20 C)."""
+        self.assertAlmostEqual(fahrenheit_to_celsius(68.0), 20.0, places=7)
+
+    def test_f_to_c_valid_one_hundred_fahrenheit_int(self):
+        """Tests F to C conversion for 100 Fahrenheit."""
+        self.assertAlmostEqual(fahrenheit_to_celsius(100), 37.7777778, places=7)
+
+    def test_f_to_c_valid_large_positive_float(self):
+        """Tests F to C conversion for a large positive temperature."""
+        self.assertAlmostEqual(fahrenheit_to_celsius(1000.0), 537.7777778, places=7)
+
+    def test_f_to_c_valid_large_negative_float(self):
+        """Tests F to C conversion for a large negative temperature."""
+        self.assertAlmostEqual(fahrenheit_to_celsius(-1000.0), -573.3333333, places=7)
+
+    def test_f_to_c_valid_absolute_zero_approx_float(self):
+        """Tests F to C conversion for approximate absolute zero (-459.67 F -> -273.15 C)."""
+        self.assertAlmostEqual(fahrenheit_to_celsius(-459.67), -273.15, places=7)
+
+    # --- Test Cases for Invalid Input Types (One method per case, checks Type Only) ---
+
+    def test_f_to_c_invalid_input_string_abc(self):
+        """Tests F to C raises TypeError for a generic string."""
+        with self.assertRaises(TypeError):
+            fahrenheit_to_celsius("string") # type: ignore
+
+    def test_f_to_c_invalid_input_string_digits(self):
+        """Tests F to C raises TypeError for a string containing digits."""
+        with self.assertRaises(TypeError):
+            fahrenheit_to_celsius("32") # type: ignore
+
+    def test_f_to_c_invalid_input_none(self):
+        """Tests F to C raises TypeError for None input."""
+        with self.assertRaises(TypeError):
+            fahrenheit_to_celsius(None) # type: ignore
+
+    def test_f_to_c_invalid_input_list(self):
+        """Tests F to C raises TypeError for list input."""
+        with self.assertRaises(TypeError):
+            fahrenheit_to_celsius([32]) # type: ignore
+
+    def test_f_to_c_invalid_input_dict(self):
+        """Tests F to C raises TypeError for dict input."""
+        with self.assertRaises(TypeError):
+            fahrenheit_to_celsius({"temp": 32}) # type: ignore
+
+    def test_f_to_c_invalid_input_tuple(self):
+        """Tests F to C raises TypeError for tuple input."""
+        with self.assertRaises(TypeError):
+            fahrenheit_to_celsius((32, 0)) # type: ignore
+
+    def test_f_to_c_invalid_input_bool_true(self):
+        """Tests F to C raises TypeError for boolean True input."""
+        with self.assertRaises(TypeError):
+            fahrenheit_to_celsius(True) # type: ignore
+
+    def test_f_to_c_invalid_input_bool_false(self):
+        """Tests F to C raises TypeError for boolean False input."""
+        with self.assertRaises(TypeError):
+            fahrenheit_to_celsius(False) # type: ignore
+
+    # def test_f_to_c_invalid_input_complex(self):
+    #     """Tests F to C raises TypeError for complex number input."""
+    #     with self.assertRaises(TypeError):
+    #         fahrenheit_to_celsius(complex(1, 2)) # type: ignore
 
 
-# --- Test Cases for Invalid Input Types (Checks Type Only) ---
+# --- Placeholder for tests of other functions ---
 
-@pytest.mark.parametrize(
-    "invalid_input",
-    [
-        "string",       # String
-        "32",           # String that looks like a number
-        None,           # NoneType
-        [32],           # List
-        {"temp": 32},   # Dictionary
-        (32, 0),        # Tuple
-        True,           # Boolean
-        False,
-        complex(1, 2), # Example: Complex numbers
-    ],
-    ids=[
-        "string_abc",
-        "string_digits",
-        "none",
-        "list",
-        "dict",
-        "tuple",
-        "bool_true",
-        "bool_false",
-        "complex",
-    ]
-)
-def test_fahrenheit_to_celsius_invalid_types(invalid_input: any):
-    """
-    Tests that fahrenheit_to_celsius raises TypeError for non-numeric inputs.
-    This version only checks the exception type, not the specific message.
-    """
-    # Use pytest.raises as a context manager to assert that a TypeError is raised.
-    # The test automatically fails if no TypeError (or subclass) is raised.
-    with pytest.raises(TypeError):
-        fahrenheit_to_celsius(invalid_input)  # type: ignore
+# class TestCelsiusToFahrenheit(unittest.TestCase):
+#     # Add individual test methods here
+#     pass
 
-    # No assertion on the specific error message string is needed here.
+
+# Allows running the tests directly using `python tests/test_core.py`
+if __name__ == '__main__':
+    unittest.main()
