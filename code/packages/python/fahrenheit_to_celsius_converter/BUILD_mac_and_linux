@@ -1,6 +1,6 @@
 python3 -m venv .venv --copies
 . .venv/bin/activate
-pip install
+pip install -e .[dev]
 pytest
 ruff check .
 mypy src
