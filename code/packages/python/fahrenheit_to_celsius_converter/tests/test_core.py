@@ -3,57 +3,58 @@ import unittest
 # Make sure this package name matches your project's package name
 from fahrenheit_to_celsius_converter.core import fahrenheit_to_celsius
 
+
 class TestFahrenheitToCelsius(unittest.TestCase):
     """Test suite for the fahrenheit_to_celsius function."""
 
     # --- Test Cases for Valid Inputs (One method per case) ---
 
     def test_f_to_c_valid_freezing_point_int(self):
-        """Tests F to C conversion at freezing point (32 F -> 0 C)."""
+        """Tests at freezing point (32 F -> 0 C)."""
         self.assertAlmostEqual(fahrenheit_to_celsius(32), 0.0, places=7)
 
     def test_f_to_c_valid_boiling_point_float(self):
-        """Tests F to C conversion at boiling point (212 F -> 100 C)."""
+        """Tests at boiling point (212 F -> 100 C)."""
         self.assertAlmostEqual(fahrenheit_to_celsius(212.0), 100.0, places=7)
 
     def test_f_to_c_valid_body_temp_float(self):
-        """Tests F to C conversion at body temperature (98.6 F -> 37 C)."""
+        """Tests at body temperature (98.6 F -> 37 C)."""
         self.assertAlmostEqual(fahrenheit_to_celsius(98.6), 37.0, places=7)
 
     def test_f_to_c_valid_scales_meet_int(self):
-        """Tests F to C conversion where scales meet (-40 F -> -40 C)."""
+        """Tests where scales meet (-40 F -> -40 C)."""
         self.assertAlmostEqual(fahrenheit_to_celsius(-40), -40.0, places=7)
 
     def test_f_to_c_valid_zero_fahrenheit_int(self):
-        """Tests F to C conversion for 0 Fahrenheit."""
+        """Tests for 0 Fahrenheit."""
         self.assertAlmostEqual(fahrenheit_to_celsius(0), -17.7777778, places=7)
 
     def test_f_to_c_valid_fifty_fahrenheit_int(self):
-        """Tests F to C conversion for 50 Fahrenheit."""
+        """Tests for 50 Fahrenheit."""
         self.assertAlmostEqual(fahrenheit_to_celsius(50), 10.0, places=7)
 
     def test_f_to_c_valid_minus_four_fahrenheit_int(self):
-        """Tests F to C conversion for -4 Fahrenheit."""
+        """Tests for -4 Fahrenheit."""
         self.assertAlmostEqual(fahrenheit_to_celsius(-4), -20.0, places=7)
 
     def test_f_to_c_valid_room_temp_float(self):
-        """Tests F to C conversion for room temperature (68 F -> 20 C)."""
+        """Tests for room temperature (68 F -> 20 C)."""
         self.assertAlmostEqual(fahrenheit_to_celsius(68.0), 20.0, places=7)
 
     def test_f_to_c_valid_one_hundred_fahrenheit_int(self):
-        """Tests F to C conversion for 100 Fahrenheit."""
+        """Tests for 100 Fahrenheit."""
         self.assertAlmostEqual(fahrenheit_to_celsius(100), 37.7777778, places=7)
 
     def test_f_to_c_valid_large_positive_float(self):
-        """Tests F to C conversion for a large positive temperature."""
+        """Tests for a large positive temperature."""
         self.assertAlmostEqual(fahrenheit_to_celsius(1000.0), 537.7777778, places=7)
 
     def test_f_to_c_valid_large_negative_float(self):
-        """Tests F to C conversion for a large negative temperature."""
+        """Tests for a large negative temperature."""
         self.assertAlmostEqual(fahrenheit_to_celsius(-1000.0), -573.3333333, places=7)
 
     def test_f_to_c_valid_absolute_zero_approx_float(self):
-        """Tests F to C conversion for approximate absolute zero (-459.67 F -> -273.15 C)."""
+        """Tests for approximate absolute zero (-459.67 F -> -273.15 C)."""
         self.assertAlmostEqual(fahrenheit_to_celsius(-459.67), -273.15, places=7)
 
     # --- Test Cases for Invalid Input Types (One method per case, checks Type Only) ---
