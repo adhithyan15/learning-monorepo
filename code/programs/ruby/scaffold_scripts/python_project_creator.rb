@@ -2,7 +2,7 @@ require 'fileutils'
 require 'optparse'
 
 # --- Configuration ---
-PYTHON_MIN_VERSION = "3.11"
+PYTHON_MIN_VERSION = "3.9"
 # --- End Configuration ---
 
 # --- Helper Functions ---

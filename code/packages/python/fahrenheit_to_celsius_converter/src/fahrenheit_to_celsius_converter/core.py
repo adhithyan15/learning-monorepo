@@ -23,7 +23,7 @@ def fahrenheit_to_celsius(temp_f: float) -> float:
         raise TypeError("Input temperature cannot be a boolean.")
 
     # Check if the input is an integer or a float
-    if not isinstance(temp_f, int | float):
+    if not isinstance(temp_f, (int, float)):
         raise TypeError("Input temperature must be a number (int or float).")
 
     # Perform the conversion using floating-point division

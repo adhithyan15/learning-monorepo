@@ -10,11 +10,10 @@ authors = [
 ]
 description = "A sample Python package: fahrenheit_to_celsius_converter" # TODO: Change me
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.9",
     "License :: OSI Approved :: MIT License", # TODO: Choose your license
     "Operating System :: OS Independent",
 ]
@@ -53,7 +52,7 @@ testpaths = [
 ]
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.9"
 warn_return_any = true
 warn_unused_configs = true
 # With src layout, mypy needs to know where the code is.
@@ -63,7 +62,7 @@ warn_unused_configs = true
 
 [tool.ruff]
 line-length = 88
-target-version = "py311"
+target-version = "py39"
 
 [tool.ruff.lint]
 select = [ "E", "W", "F", "I", "UP", "B" ]
