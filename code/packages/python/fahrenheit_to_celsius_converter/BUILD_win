@@ -1,0 +1,8 @@
+python -m venv .venv
+.venv\Scripts\activate.bat
+pip install -e .[dev]
+pytest
+ruff check .
+mypy src
+pip install build
+python -m build

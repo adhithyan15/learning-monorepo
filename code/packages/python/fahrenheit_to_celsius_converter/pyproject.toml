@@ -1,0 +1,77 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fahrenheit_to_celsius_converter"
+version = "0.1.0"
+authors = [
+  { name="Adhithya Rajasekaran", email="you@example.com" }, # TODO: Change me
+]
+description = "A sample Python package: fahrenheit_to_celsius_converter" # TODO: Change me
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License", # TODO: Choose your license
+    "Operating System :: OS Independent",
+]
+# dependencies = [] # Runtime dependencies
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "mypy>=1.0",
+    "ruff>=0.1",
+    "pre-commit>=3.0",
+    # "build",
+    # "twine",
+]
+
+# --- SRC LAYOUT CHANGE IN SETuptools CONFIG ---
+[tool.setuptools]
+# Tell setuptools that packages are under the 'src' directory
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+# Automatically find packages within the 'src' directory
+where = ["src"]
+# Alternatively, if you prefer explicit declaration with src layout:
+# packages = ["fahrenheit_to_celsius_converter"] # (But ensure package-dir above is also set)
+# --- END SRC LAYOUT CHANGE ---
+
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+# Pytest should find the installed package even with src layout when installed editable
+addopts = "-ra -q --cov=fahrenheit_to_celsius_converter --cov-report=term-missing"
+testpaths = [
+    "tests",
+]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+# With src layout, mypy needs to know where the code is.
+# Setting 'mypy_path' or configuring 'tool.setuptools' might help it find it,
+# or you'll run mypy specifically on the src and tests dirs (see README).
+# packages = ["fahrenheit_to_celsius_converter"] # Can help mypy find the package
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [ "E", "W", "F", "I", "UP", "B" ]
+ignore = []
+
+[tool.ruff.format]
+# Optional formatting configurations
+
+#[tool.coverage.run]
+#source = ["src/fahrenheit_to_celsius_converter"] # Coverage source might need adjusting for src layout
+
