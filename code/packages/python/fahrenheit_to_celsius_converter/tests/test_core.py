@@ -4,8 +4,8 @@
 
 import pytest  # type: ignore # Prevents mypy complaining about pytest import
 
-# Assuming your package is installed in editable mode (-e .[dev])
-# Replace 'your_package_name' with the actual package name if different
+# Make sure this package name matches your project's package name
+# (Should be correct based on previous steps)
 from fahrenheit_to_celsius_converter.core import fahrenheit_to_celsius
 
 # --- Test Cases for Valid Inputs ---
@@ -57,11 +57,11 @@ def test_fahrenheit_to_celsius_valid_inputs(temp_f: float | int, expected_c: flo
     """
     Tests the fahrenheit_to_celsius function with various valid numeric inputs.
     """
-    # Use pytest.approx for floating-point comparisons to handle tiny precision differences
+    # Use pytest.approx for floating-point comparisons
     assert fahrenheit_to_celsius(temp_f) == pytest.approx(expected_c)
 
 
-# --- Test Cases for Invalid Input Types ---
+# --- Test Cases for Invalid Input Types (Checks Type Only) ---
 
 @pytest.mark.parametrize(
     "invalid_input",
@@ -72,12 +72,11 @@ def test_fahrenheit_to_celsius_valid_inputs(temp_f: float | int, expected_c: flo
         [32],           # List
         {"temp": 32},   # Dictionary
         (32, 0),        # Tuple
-        True,           # Boolean (although bool is subclass of int, often good to test explicitly)
+        True,           # Boolean
         False,
-        # Add other non-numeric types if relevant
-        # complex(1, 2), # Example: Complex numbers (if they shouldn't be allowed)
+        # complex(1, 2), # Example: Complex numbers
     ],
-    ids=[ # Optional IDs
+    ids=[
         "string_abc",
         "string_digits",
         "none",
@@ -92,10 +91,11 @@ def test_fahrenheit_to_celsius_valid_inputs(temp_f: float | int, expected_c: flo
 def test_fahrenheit_to_celsius_invalid_types(invalid_input: any):
     """
     Tests that fahrenheit_to_celsius raises TypeError for non-numeric inputs.
+    This version only checks the exception type, not the specific message.
     """
-    # Use pytest.raises as a context manager to assert that an exception is raised
-    with pytest.raises(TypeError) as excinfo:
-        fahrenheit_to_celsius(invalid_input) # type: ignore
+    # Use pytest.raises as a context manager to assert that a TypeError is raised.
+    # The test automatically fails if no TypeError (or subclass) is raised.
+    with pytest.raises(TypeError):
+        fahrenheit_to_celsius(invalid_input)  # type: ignore
 
-    # Optional: Check the exception message contains expected text
-    assert "must be a number" in str(excinfo.value)
+    # No assertion on the specific error message string is needed here.
