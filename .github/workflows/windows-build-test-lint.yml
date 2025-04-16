@@ -30,7 +30,6 @@ jobs:
           choco install zig
           choco install lua
           choco install r
-          echo Attempting to Set Updated Path
           SET "PATH=%PATH%;C:\ProgramData\chocolatey\bin"
           echo %PATH%
           lua -v
@@ -38,4 +37,7 @@ jobs:
           gcc --version
           clang -v
           go version
+          npm install -g typescript
+          npm install -g deno
+          npm install -g bun
           ruby code\programs\ruby\monorepo_build\build.rb
