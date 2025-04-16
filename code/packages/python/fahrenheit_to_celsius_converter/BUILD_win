@@ -1,4 +1,4 @@
-python -m venv .venv
+python3 -m venv .venv --copies
 .venv\Scripts\activate.bat
 pip install -e .[dev]
 pytest
