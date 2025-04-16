@@ -17,7 +17,7 @@ jobs:
           ruby-version: '3.3'
           bundler-cache: true
       - name: Installing necessary software and running the build script
-        shell: pwsh
+        shell: cmd
         run: |
           go version
           choco install rust
