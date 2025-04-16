@@ -30,9 +30,7 @@ jobs:
           choco install zig
           choco install lua
           choco install r
-          npm install -g typescript
-          npm install -g deno
-          npm install -g bun
+          echo Attempting to Set Updated Path
           SET "PATH=%PATH%;C:\ProgramData\chocolatey\bin"
           echo %PATH%
           lua -v
