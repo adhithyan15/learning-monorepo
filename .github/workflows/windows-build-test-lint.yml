@@ -16,9 +16,6 @@ jobs:
         with:
           ruby-version: '3.3'
           bundler-cache: true
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
       - name: Installing necessary software and running the build script
         shell: pwsh
         run: |
