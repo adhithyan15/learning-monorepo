@@ -19,23 +19,25 @@ jobs:
       - name: Installing necessary software and running the build script
         shell: cmd
         run: |
-          go version
           choco install rust
           choco install llvm
-          clang -v
           choco install mingw
-          gcc --version
           choco install erlang
           choco install gnucobol
           choco install strawberryperl
           choco install haskell-dev
           choco install openjdk
           choco install zig
-          dotnet --help
           choco install lua
           choco install r
-          lua -v
           npm install -g typescript
           npm install -g deno
           npm install -g bun
+          SET "PATH=%PATH%;C:\ProgramData\chocolatey\bin"
+          echo %PATH%
+          lua -v
+          dotnet --help
+          gcc --version
+          clang -v
+          go version
           ruby code\programs\ruby\monorepo_build\build.rb
