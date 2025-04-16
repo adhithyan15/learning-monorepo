@@ -74,7 +74,7 @@ def test_fahrenheit_to_celsius_valid_inputs(temp_f: float | int, expected_c: flo
         (32, 0),        # Tuple
         True,           # Boolean
         False,
-        # complex(1, 2), # Example: Complex numbers
+        complex(1, 2), # Example: Complex numbers
     ],
     ids=[
         "string_abc",
@@ -85,7 +85,7 @@ def test_fahrenheit_to_celsius_valid_inputs(temp_f: float | int, expected_c: flo
         "tuple",
         "bool_true",
         "bool_false",
-        # "complex",
+        "complex",
     ]
 )
 def test_fahrenheit_to_celsius_invalid_types(invalid_input: any):
