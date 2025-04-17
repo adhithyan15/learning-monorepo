@@ -68,8 +68,10 @@ File.write(dune_file, dune_content)
 
 # === .opam ===
 File.write(opam_file, <<~OPAM)
-  opam-version: "2.1"
+  opam-version: "2.0"
   name: "#{project_name}"
+  maintainer: "Adhithya Rajasekaran"
+  synopsis: ""
   depends: [
     "ocaml"
     "dune"
