@@ -2,7 +2,7 @@
     "name": "hello_world",
     "version": "0.0.1",
     "esy": {
-      "build": "dune build"
+      "build": "dune build --no-cache"
     },
     "dependencies": {
       "ocaml": "~5.1.0",

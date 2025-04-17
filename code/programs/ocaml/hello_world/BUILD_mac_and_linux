@@ -1,3 +1,3 @@
 esy
-esy build
-esy x hello_world
+esy b dune build
+esy b dune exec ./hello_world.exe
