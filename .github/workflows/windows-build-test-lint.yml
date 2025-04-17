@@ -16,14 +16,6 @@ jobs:
         with:
           ruby-version: '3.3'
           bundler-cache: true
-      - name: Set-up OCaml
-        uses: ocaml/setup-ocaml@v3
-        with:
-          ocaml-compiler: 5
-          dune-cache: true
-      - name: Install dune and project deps
-        run: |
-          opam install dune
       - name: Installing necessary software and running the build script
         shell: pwsh
         run: |
@@ -48,4 +40,6 @@ jobs:
           npm install -g typescript
           npm install -g deno
           npm install -g bun
+          npm install -g esy
+          esy --version
           ruby code\programs\ruby\monorepo_build\build.rb

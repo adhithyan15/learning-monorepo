@@ -12,15 +12,6 @@ jobs:
         uses: actions/checkout@v4
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: Set-up OCaml
-        uses: ocaml/setup-ocaml@v3
-        with:
-          ocaml-compiler: 5
-          dune-cache: true
-      - name: Install dune and project deps
-        run: |
-          opam install dune -y
-          eval $(opam env)
       - run: brew install go
       - run: go version
       - run: brew install rust
@@ -44,4 +35,6 @@ jobs:
       - run: curl -fsSL https://deno.land/x/install/install.sh | sudo DENO_INSTALL=/usr/local sh
       - run: gem install bundler
       - run: npm install -g bun
+      - run: npm install -g esy
+      - run: esy --version
       - run: ruby code/programs/ruby/monorepo_build/build.rb
