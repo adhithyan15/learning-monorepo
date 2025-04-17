@@ -1,0 +1,11 @@
+{
+    "name": "hello_world",
+    "version": "0.0.1",
+    "esy": {
+      "build": "dune build"
+    },
+    "dependencies": {
+      "ocaml": "~5.1.0",
+      "@opam/dune": "*"
+    }
+  }

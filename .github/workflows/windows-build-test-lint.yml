@@ -40,4 +40,6 @@ jobs:
           npm install -g typescript
           npm install -g deno
           npm install -g bun
+          npm install -g esy
+          esy --version
           ruby code\programs\ruby\monorepo_build\build.rb

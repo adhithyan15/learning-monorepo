@@ -1,0 +1,3 @@
+esy
+esy b dune build
+esy b dune exec ./hello_world.exe

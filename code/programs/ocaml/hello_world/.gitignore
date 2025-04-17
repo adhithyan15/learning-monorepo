@@ -1,0 +1,9 @@
+_build/
+.merlin
+*.install
+.vscode/
+.opam-switch/
+*.exe
+*.swp
+esy.lock
+_esy
