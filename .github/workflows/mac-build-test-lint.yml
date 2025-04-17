@@ -16,6 +16,10 @@ jobs:
         uses: ocaml/setup-ocaml@v3
         with:
           ocaml-compiler: 5
+          dune-cache: true
+      - name: Install dune and project deps
+        run: |
+          opam install dune
       - run: brew install go
       - run: go version
       - run: brew install rust

@@ -20,6 +20,10 @@ jobs:
         uses: ocaml/setup-ocaml@v3
         with:
           ocaml-compiler: 5
+          dune-cache: true
+      - name: Install dune and project deps
+        run: |
+          opam install dune
       - name: Installing necessary software and running the build script
         shell: pwsh
         run: |

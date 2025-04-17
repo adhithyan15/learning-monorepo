@@ -17,6 +17,10 @@ jobs:
         uses: ocaml/setup-ocaml@v3
         with:
           ocaml-compiler: 5
+          dune-cache: true
+      - name: Install dune and project deps
+        run: |
+          opam install dune
       - run: go version
       - run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -y 1
       - run: clang -v
