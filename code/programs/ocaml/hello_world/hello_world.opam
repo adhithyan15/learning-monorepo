@@ -1,0 +1,11 @@
+opam-version: "2.0"
+name: "hello_world"
+maintainer: "Adhithya Rajasekaran"
+synopsis: "A simple hello world program"
+depends: [
+  "ocaml"
+  "dune"
+]
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]
