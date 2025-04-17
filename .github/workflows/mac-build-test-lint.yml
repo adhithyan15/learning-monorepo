@@ -19,7 +19,8 @@ jobs:
           dune-cache: true
       - name: Install dune and project deps
         run: |
-          opam install dune
+          opam install dune -y
+          eval $(opam env)
       - run: brew install go
       - run: go version
       - run: brew install rust

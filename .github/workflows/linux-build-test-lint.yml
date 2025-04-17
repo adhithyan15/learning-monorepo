@@ -20,7 +20,8 @@ jobs:
           dune-cache: true
       - name: Install dune and project deps
         run: |
-          opam install dune
+          opam install dune -y
+          eval $(opam env)
       - run: go version
       - run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -y 1
       - run: clang -v

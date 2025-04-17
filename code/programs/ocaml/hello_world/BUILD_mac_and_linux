@@ -1,4 +1,3 @@
 opam install . --deps-only
-eval $(opam env)
 dune build
 ./_build/default/hello_world
