@@ -1,0 +1,8 @@
+python -m venv .venv --copies
+.venv\Scripts\activate.bat
+pip install -e .[dev]
+python tests/test_core.py
+ruff check .
+mypy src
+pip install build
+python -m build
