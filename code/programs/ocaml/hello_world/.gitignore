@@ -5,3 +5,5 @@ _build/
 .opam-switch/
 *.exe
 *.swp
+esy.lock
+_esy

@@ -6,6 +6,6 @@
     },
     "dependencies": {
       "ocaml": "~5.1.0",
-      "dune": "*"
+      "@opam/dune": "*"
     }
   }
