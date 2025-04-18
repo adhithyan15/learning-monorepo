@@ -1,2 +1,2 @@
 clang -framework Foundation -fobjc-arc -o hello_world main.m
-hello_world
+./hello_world
