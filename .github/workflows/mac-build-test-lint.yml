@@ -44,5 +44,6 @@ jobs:
           ~/.swiftly/bin/swiftly init --quiet-shell-followup && \
           . ~/.swiftly/env.sh && \
           hash -r
+      - run: echo "$HOME/.swiftly/bin" >> $GITHUB_PATH
       - run: swift --version
       - run: ruby code/programs/ruby/monorepo_build/build.rb
