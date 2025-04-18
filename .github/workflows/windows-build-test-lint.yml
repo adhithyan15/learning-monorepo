@@ -16,6 +16,8 @@ jobs:
         with:
           ruby-version: '3.3'
           bundler-cache: true
+      - name: Check WinGet version
+        run: winget --version
       - name: Installing necessary software and running the build script
         shell: pwsh
         run: |
@@ -42,4 +44,5 @@ jobs:
           npm install -g bun
           npm install -g esy
           esy --version
+          winget install --id Swift.Toolchain -e
           ruby code\programs\ruby\monorepo_build\build.rb
