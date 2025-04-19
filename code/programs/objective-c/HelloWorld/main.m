@@ -2,7 +2,7 @@
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        NSLog(@"Hello, World from Objective-C!");
+        printf("Hello from Objective-C using printf!\n");
     }
     return 0;
 }
