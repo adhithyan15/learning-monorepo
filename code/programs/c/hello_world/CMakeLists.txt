@@ -22,7 +22,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin-${COMPILER_NAME}")
 set(EXE_NAME "hello-world-${COMPILER_NAME}")
 
 # Define the executable
-add_executable(${EXE_NAME} src/hello_world.c)
+add_executable(${EXE_NAME} hello_world.c)
 
 # Add compiler-specific warning flags
 if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
