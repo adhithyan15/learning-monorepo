@@ -47,4 +47,6 @@ jobs:
           . ~/.local/share/swiftly/env.sh && \
           hash -r
       - run: swift --version
+      - run: sudo apt install php
+      - run: php -v
       - run: ruby code/programs/ruby/monorepo_build/build.rb
