@@ -1,4 +1,7 @@
-clang hello_world.c -o hello_world
-./hello_world
-gcc hello_world.c -o hello_world2
-./hello_world2
+cmake -B build-gcc -DCMAKE_C_COMPILER=gcc
+cmake --build build-gcc
+./build-gcc/bin-gnu/hello-world-gnu
+clang --version
+cmake -B build-clang -DCMAKE_C_COMPILER=clang
+cmake --build build-clang
+./build-clang/bin-clang/hello-world-clang
