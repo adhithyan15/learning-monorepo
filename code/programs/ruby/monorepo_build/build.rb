@@ -346,6 +346,23 @@ rescue => e
 end
 # ************************************
 
+# --- Shortcut Mode: Build a Single BUILD File ---
+if ARGV.length == 1
+  user_provided_path = ARGV[0]
+  if File.file?(user_provided_path) && File.basename(user_provided_path).match?(BUILD_FILE_PATTERN)
+    absolute_path = File.absolute_path(user_provided_path)
+    puts "[INFO] User requested single BUILD file execution:"
+    puts "[INFO] > #{absolute_path}"
+    process_build_file(absolute_path)
+    puts "\n--------------------------------"
+    puts "[INFO] Single BUILD file finished successfully."
+    exit(0)
+  else
+    puts "[ERR] Provided path is not a valid BUILD file: #{user_provided_path}"
+    exit(1)
+  end
+end
+
 start_directory = Dir.pwd
 puts "[INFO] Starting build scan in: #{start_directory}"
 
