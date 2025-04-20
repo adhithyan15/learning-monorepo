@@ -47,4 +47,11 @@ jobs:
           . ~/.local/share/swiftly/env.sh && \
           hash -r
       - run: swift --version
+      - run: sudo apt install php
+      - run: php -v
+      - name: Install Composer
+        run: |
+          curl -sS https://getcomposer.org/installer | php
+          sudo mv composer.phar /usr/local/bin/composer
+      - run: composer -v
       - run: ruby code/programs/ruby/monorepo_build/build.rb

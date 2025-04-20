@@ -42,4 +42,8 @@ jobs:
           npm install -g bun
           npm install -g esy
           esy --version
+          choco install php
+          php -v
+          choco install composer
+          composer -v
           ruby code\programs\ruby\monorepo_build\build.rb

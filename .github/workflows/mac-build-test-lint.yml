@@ -39,5 +39,12 @@ jobs:
       - run: npm install -g esy
       - run: esy --version
       - run: swift --version
+      - run: brew install php
+      - run: php -v
+      - name: Install Composer
+        run: |
+          curl -sS https://getcomposer.org/installer | php
+          sudo mv composer.phar /usr/local/bin/composer
+      - run: composer -v
       - run: cmake --version
       - run: ruby code/programs/ruby/monorepo_build/build.rb
