@@ -53,5 +53,5 @@ jobs:
         run: |
           curl -sS https://getcomposer.org/installer | php
           sudo mv composer.phar /usr/local/bin/composer
-      - run: compser -v
+      - run: composer -v
       - run: ruby code/programs/ruby/monorepo_build/build.rb
