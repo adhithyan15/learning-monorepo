@@ -44,4 +44,6 @@ jobs:
           esy --version
           choco install php
           php -v
+          choco install composer
+          composer -v
           ruby code\programs\ruby\monorepo_build\build.rb
