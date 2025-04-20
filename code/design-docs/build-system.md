@@ -55,3 +55,6 @@ If an operating system other than the one specified is found, the build file is 
 
 ### V3 Update
 Windows provides a number of challenges. So, for many things, I might first start building on linux and mac and then come back to Windows. But I currently have to two separate BUILD files for linux and mac. So, I am introducing a new BUILD file with a prefix called `BUILD_mac_and_linux`. The build system will detect this and use the logic in the file to build both mac and linux. 
+
+### V4 Update
+Mac and Linux builds are quite fast. But Windows build is up to 30 minutes or so. So, building the entire repo is a challenge. So, in the V4 update, I introduced a way to build just a single BUILD file. 
