@@ -1,6 +1,9 @@
-clang hello_world.c -o hello_world_clang.exe
-.\hello_world_clang.exe
-gcc hello_world.c -o hello_world_gcc.exe
-.\hello_world_gcc.exe
-cl hello_world.c
-.\hello_world.exe
+cmake -B build-msvc -G "NMake Makefiles"
+cmake --build build-msvc
+.\build-msvc\bin-msvc\hello-msvc.exe
+cmake -B build-gcc -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc
+cmake --build build-gcc
+.\build-gcc\bin-gnu\hello-world-gnu.exe
+cmake -B build-clang -G "MinGW Makefiles" -DCMAKE_C_COMPILER=clang
+cmake --build build-clang
+.\build-clang\bin-clang\hello-world-clang.exe
