@@ -47,4 +47,6 @@ jobs:
           choco install composer
           composer -v
           cmake --version
+          choco install ninja
+          ninja --version
           ruby code\programs\ruby\monorepo_build\build.rb

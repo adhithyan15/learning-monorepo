@@ -1,7 +1,7 @@
-cmake -B build-apple
-cmake --build build-apple
-./build-apple/bin-appleclang/hello-world-appleclang
+cmake -B build-ninja-appleclang -G Ninja
+cmake --build build-ninja-appleclang
+./build-ninja-appleclang/bin-appleclang/hello-world-appleclang
 gcc-13 --version
-cmake -B build-gcc -DCMAKE_C_COMPILER=$(which gcc-13)
-cmake --build build-gcc
-./build-gcc/bin-gnu/hello-world-gnu
+cmake -B build-ninja-gcc -G Ninja -DCMAKE_C_COMPILER=$(which gcc-13)
+cmake --build build-ninja-gcc
+./build-ninja-gcc/bin-gnu/hello-world-gnu

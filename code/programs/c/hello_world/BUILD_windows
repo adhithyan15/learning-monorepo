@@ -1,9 +1,9 @@
-cmake -B build-msvc -G "NMake Makefiles"
-cmake --build build-msvc
-.\build-msvc\bin-msvc\hello-msvc.exe
-cmake -B build-gcc -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc
-cmake --build build-gcc
-.\build-gcc\bin-gnu\hello-world-gnu.exe
-cmake -B build-clang -G "MinGW Makefiles" -DCMAKE_C_COMPILER=clang
-cmake --build build-clang
-.\build-clang\bin-clang\hello-world-clang.exe
+cmake -B build-ninja-msvc -G "Ninja"
+cmake --build build-ninja-msvc
+.\build-ninja-msvc\bin-msvc\hello-msvc.exe
+cmake -B build-ninja-gcc -G "Ninja" -DCMAKE_C_COMPILER=gcc
+cmake --build build-ninja-gcc
+.\build-ninja-gcc\bin-gnu\hello-world-gnu.exe
+cmake -B build-ninja-clang -G "Ninja" -DCMAKE_C_COMPILER=clang
+cmake --build build-ninja-clang
+.\build-ninja-clang\bin-clang\hello-world-clang.exe
