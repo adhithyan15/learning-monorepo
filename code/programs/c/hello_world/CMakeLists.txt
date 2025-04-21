@@ -24,9 +24,34 @@ set(EXE_NAME "hello-world-${COMPILER_NAME}")
 # Define the executable
 add_executable(${EXE_NAME} hello_world.c)
 
-# Add compiler-specific warning flags
+# Add aggressive warning flags per compiler
 if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
-    target_compile_options(${EXE_NAME} PRIVATE -Wall -Wextra -pedantic)
+    target_compile_options(${EXE_NAME} PRIVATE
+        -Wall
+        -Wextra
+        -pedantic
+        -Wconversion
+        -Wsign-conversion
+        -Wshadow
+        -Wstrict-prototypes
+        -Wmissing-prototypes
+        -Wdouble-promotion
+        -Wformat=2
+    )
+    # Optional: Treat all warnings as errors
+    # target_compile_options(${EXE_NAME} PRIVATE -Werror)
+
 elseif (CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-    target_compile_options(${EXE_NAME} PRIVATE /W4 /permissive-)
+    target_compile_options(${EXE_NAME} PRIVATE
+        /W4
+        /permissive-
+        /w14242  # conversion: possible loss of data
+        /w14263  # does not override any base
+        /w14265  # virtual funcs but no virtual dtor
+        /w14287  # unsigned/negative mismatch
+        /we4289  # loop var used outside scope
+        /w14296  # expression always false
+        /w14311  # pointer truncation
+        # /WX    # Uncomment to treat warnings as errors
+    )
 endif()

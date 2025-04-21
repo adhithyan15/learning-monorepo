@@ -1,6 +1,9 @@
-clang hello_world.c -o hello_world_clang.exe
-.\hello_world_clang.exe
-gcc hello_world.c -o hello_world_gcc.exe
-.\hello_world_gcc.exe
-cl hello_world.c
-.\hello_world.exe
+cmake -B build-ninja-msvc -G "Ninja"
+cmake --build build-ninja-msvc
+.\build-ninja-msvc\bin-msvc\hello-world-msvc.exe
+cmake -B build-ninja-gcc -G "Ninja" -DCMAKE_C_COMPILER=gcc
+cmake --build build-ninja-gcc
+.\build-ninja-gcc\bin-gnu\hello-world-gnu.exe
+cmake -B build-ninja-clang -G "Ninja" -DCMAKE_C_COMPILER=clang
+cmake --build build-ninja-clang
+.\build-ninja-clang\bin-clang\hello-world-clang.exe

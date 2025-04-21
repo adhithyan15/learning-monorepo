@@ -1,7 +1,7 @@
-cmake -B build-gcc -DCMAKE_C_COMPILER=gcc
-cmake --build build-gcc
-./build-gcc/bin-gnu/hello-world-gnu
+cmake -B build-ninja-gcc -G Ninja -DCMAKE_C_COMPILER=gcc
+cmake --build build-ninja-gcc
+./build-ninja-gcc/bin-gnu/hello-world-gnu
 clang --version
-cmake -B build-clang -DCMAKE_C_COMPILER=clang
-cmake --build build-clang
-./build-clang/bin-clang/hello-world-clang
+cmake -B build-ninja-clang -G Ninja -DCMAKE_C_COMPILER=clang
+cmake --build build-ninja-clang
+./build-ninja-clang/bin-clang/hello-world-clang
