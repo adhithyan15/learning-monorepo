@@ -1,6 +1,6 @@
 cmake -B build-ninja-msvc -G "Ninja"
 cmake --build build-ninja-msvc
-.\build-ninja-msvc\bin-msvc\hello-msvc.exe
+.\bin-msvc\hello-msvc.exe
 cmake -B build-ninja-gcc -G "Ninja" -DCMAKE_C_COMPILER=gcc
 cmake --build build-ninja-gcc
 .\build-ninja-gcc\bin-gnu\hello-world-gnu.exe
