@@ -1,2 +1,2 @@
-docker build --tag scratch-image --file ./Dockerfile
-podman build --tag scratch-image --file ./Dockerfile
+docker build --tag scratch-image --file ./Dockerfile .
+podman build --tag scratch-image --file ./Dockerfile .
