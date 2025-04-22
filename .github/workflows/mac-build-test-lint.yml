@@ -47,4 +47,6 @@ jobs:
           sudo mv composer.phar /usr/local/bin/composer
       - run: composer -v
       - run: cmake --version
+      - run: brew install ninja
+      - run: ninja --version
       - run: ruby code/programs/ruby/monorepo_build/build.rb
