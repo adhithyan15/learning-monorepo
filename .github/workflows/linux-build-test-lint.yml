@@ -55,4 +55,5 @@ jobs:
           sudo mv composer.phar /usr/local/bin/composer
       - run: composer -v
       - run: sudo apt-get install ninja-build
+      - run: sudo apt-get -y install podman
       - run: ruby code/programs/ruby/monorepo_build/build.rb
