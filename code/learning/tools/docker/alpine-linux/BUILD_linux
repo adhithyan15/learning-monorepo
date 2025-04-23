@@ -1,0 +1,4 @@
+docker build -t hello-world-alpine .
+docker run --rm hello-world-alpine
+podman build -t hello-world-alpine .
+podman run --rm hello-world-alpine
