@@ -39,6 +39,8 @@ jobs:
           refreshenv
           lua -v
           luarocks --version
+          luarocks install tl
+          luarocks install cyan
           npm install -g typescript
           npm install -g deno
           npm install -g bun
