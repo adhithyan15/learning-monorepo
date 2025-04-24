@@ -1,0 +1,17 @@
+{
+    "name": "adhithyan15/hello_world",
+    "description": "A super simple hello world program in PHP using composer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adhithya Rajasekaran",
+            "email": "test@test.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+composer install
+php index.php
+docker build --tag php-hello-world --file ./Dockerfile .
+podman build --tag php-hello-world --file ./Dockerfile .
