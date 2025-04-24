@@ -24,7 +24,12 @@ jobs:
       - run: sudo apt-get install openjdk-17-jre
       - run: sudo snap install zig --classic --beta
       - run: sudo apt-get update
-      - run: sudo apt-get install -y dotnet-sdk-9.0
+      - name: Install .NET SDK
+        run: |
+          wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+          chmod +x ./dotnet-install.sh
+          ./dotnet-install.sh --version latest  --install-dir $HOME/dotnet
+          echo "$HOME/dotnet" >> $GITHUB_PATH
       - run: dotnet --help
       - run: sudo apt-get install r-base-core
       - run: sudo apt-get install lua5.4 liblua5.4-dev
