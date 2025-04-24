@@ -31,8 +31,8 @@ jobs:
       - run: sudo apt-get install lua5.4 liblua5.4-dev luarocks
       - run: lua -v
       - run: luarocks --version
-      - run: luarocks install tl
-      - run: luarocks install cyan
+      - run: sudo luarocks install tl
+      - run: sudo luarocks install cyan
       - run: sudo snap install powershell --classic
       - run: sudo gem install rspec
       - run: sudo npm install -g typescript
