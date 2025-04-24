@@ -28,8 +28,9 @@ jobs:
       - run: sudo apt-get install -y dotnet-sdk-9.0
       - run: dotnet --help
       - run: sudo apt-get install r-base-core
-      - run: sudo apt-get install lua5.4 liblua5.4-dev
+      - run: sudo apt-get install lua5.4 liblua5.4-dev luarocks
       - run: lua -v
+      - run: luarocks --version
       - run: sudo snap install powershell --classic
       - run: sudo gem install rspec
       - run: sudo npm install -g typescript

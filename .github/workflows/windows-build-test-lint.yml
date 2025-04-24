@@ -33,10 +33,12 @@ jobs:
           choco install zig
           dotnet --help
           choco install lua
+          choco install luarocks
           choco install r
           Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
           refreshenv
           lua -v
+          luarocks --version
           npm install -g typescript
           npm install -g deno
           npm install -g bun
