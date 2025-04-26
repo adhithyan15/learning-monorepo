@@ -271,7 +271,6 @@ end
 
 # Processes a DIRS file, recursively processing items in listed subdirectories.
 # Will exit script via recursive calls if any failure occurs.
-# MODIFIED: Added 'processed_set' parameter
 def process_dirs_file(dirs_file_path, processed_set)
   absolute_path = File.absolute_path(dirs_file_path)
 
@@ -308,7 +307,7 @@ def process_dirs_file(dirs_file_path, processed_set)
 
           if filename == DIRS_FILE_NAME
             # Recursive call - pass the set along!
-            process_dirs_file(full_entry_path, processed_set) # MODIFIED: Pass processed_set
+            process_dirs_file(full_entry_path, processed_set)
           elsif filename.match?(BUILD_FILE_PATTERN)
             # Process BUILD - will exit if failure occurs within
             process_build_file(full_entry_path)
@@ -378,7 +377,7 @@ begin
       filename = File.basename(entry_path)
       if filename == DIRS_FILE_NAME
         # Pass the set to the initial call
-        process_dirs_file(entry_path, processed_dirs_files) # MODIFIED: Pass the set
+        process_dirs_file(entry_path, processed_dirs_files)
       elsif filename.match?(BUILD_FILE_PATTERN)
         process_build_file(entry_path) # Process top-level build file
       end
