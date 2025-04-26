@@ -183,9 +183,6 @@ BUILD_FILE_PATTERN = /^BUILD(?:_windows|_mac_and_linux|_mac|_linux)?$/
 DIRS_FILE_NAME = "DIRS"
 BUILD_COMMENT_CHAR = "#"
 
-# --- Global State ---
-# Removed: $processed_dirs_files = Set.new
-
 # --- Helper Functions ---
 
 # Function to execute a single shell command
