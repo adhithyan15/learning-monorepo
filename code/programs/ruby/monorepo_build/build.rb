@@ -1,5 +1,6 @@
 require "open3"
 require "pathname" # Needed by MSVC setup code
+require "set"
 
 puts "[INFO] Starting the build process..."
 
