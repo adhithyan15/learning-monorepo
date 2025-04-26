@@ -53,4 +53,5 @@ jobs:
       - run: cmake --version
       - run: brew install ninja
       - run: ninja --version
+      - run: gem install standard
       - run: ruby code/programs/ruby/monorepo_build/build.rb

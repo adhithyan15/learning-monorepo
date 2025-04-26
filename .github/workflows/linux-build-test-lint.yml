@@ -60,4 +60,5 @@ jobs:
       - run: composer -v
       - run: sudo apt-get install ninja-build
       - run: sudo apt-get -y install podman
+      - run: gem install standard
       - run: ruby code/programs/ruby/monorepo_build/build.rb
