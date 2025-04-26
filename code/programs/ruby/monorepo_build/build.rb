@@ -178,7 +178,6 @@ end
 # End of MSVC Environment Setup Code
 # ==================================================
 
-
 # --- Configuration ---
 BUILD_FILE_PATTERN = /^BUILD(?:_windows|_mac_and_linux|_mac|_linux)?$/
 DIRS_FILE_NAME = "DIRS"
