@@ -196,11 +196,17 @@ def execute_command(command, current_working_directory)
   # Pass the current ENV which now includes MSVC vars if on Windows
   stdout_str, stderr_str, status = Open3.capture3(ENV, command, chdir: current_working_directory)
 
-  if status.success?
+  if status.success? # MODIFIED Block Start
     puts "[OUT] #{stdout_str.strip}" unless stdout_str.strip.empty?
+    # Optionally print stderr even on success if needed for debugging certain tools
+    # puts "[LOG STDERR] #{stderr_str.strip}" unless stderr_str.strip.empty?
   else
     puts "[ERR] Command failed! (Exit Status: #{status.exitstatus})"
-    puts "[ERR] #{stderr_str.strip}" unless stderr_str.strip.empty?
+    # Print both stdout and stderr to see the actual error from the command
+    puts "[ERR STDOUT]"
+    puts stdout_str unless stdout_str.empty?
+    puts "[ERR STDERR]"
+    puts stderr_str unless stderr_str.strip.empty?
     exit(status.exitstatus) # FAIL FAST: Exit with the command's status
   end
 rescue => e
