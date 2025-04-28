@@ -1,10 +1,14 @@
-require "minitest/autorun"
-require_relative "../lib/build_context"
-require_relative "../lib/file_processing_history"
+require 'minitest/autorun'
+require_relative '../lib/build_context'
+require_relative '../lib/file_processing_history'
+require_relative '../lib/logger'
 
 class BuildContextTest < Minitest::Test
   def setup
-    @context = BuildContext.new(file_processing_history: FileProcessingHistory.new)
+    @context = BuildContext.new(
+      file_processing_history: FileProcessingHistory.new,
+      logger: Logger.new
+    )
   end
 
   def test_file_processing_history_exists
@@ -16,5 +20,9 @@ class BuildContextTest < Minitest::Test
     refute @context.file_processing_history.already_processed?(path)
     @context.file_processing_history.mark_processed(path)
     assert @context.file_processing_history.already_processed?(path)
+  end
+
+  def test_logger_exists
+    assert_instance_of Logger, @context.logger
   end
 end
