@@ -1,4 +1,4 @@
-sudo bundle install
+bundle install
 ruby test/test.rb
 bundle exec rake build
 bundle exec rake spec
