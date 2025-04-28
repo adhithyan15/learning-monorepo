@@ -1,23 +1,22 @@
-require 'open3'
-require 'set'
-require 'pathname'
+require "open3"
+require "pathname"
 
-require_relative 'lib/get_context'
+require_relative "lib/get_context"
 
 # --- Configuration ---
 BUILD_FILE_PATTERN = /^BUILD(?:_windows|_mac_and_linux|_mac|_linux)?$/
 DIRS_FILE_NAME = "DIRS"
-BUILD_COMMENT_CHAR = '#'
+BUILD_COMMENT_CHAR = "#"
 
 # ==================================================
 # MSVC Environment Setup Code (for Windows)
 # ==================================================
 
 def find_vswhere
-  vswhere_path = Pathname.new(ENV['ProgramFiles(x86)']) / 'Microsoft Visual Studio' / 'Installer' / 'vswhere.exe'
+  vswhere_path = Pathname.new(ENV["ProgramFiles(x86)"]) / "Microsoft Visual Studio" / "Installer" / "vswhere.exe"
   return vswhere_path.to_s if vswhere_path.exist?
 
-  output, status = Open3.capture2('where vswhere.exe')
+  output, status = Open3.capture2("where vswhere.exe")
   return output.lines.first.strip if status.success? && !output.empty?
 
   raise "vswhere.exe not found at standard location or in PATH. Cannot locate Visual Studio."
@@ -71,7 +70,7 @@ def filter_path_value(path_string)
   Set.new(path_string.split(";").reject(&:empty?)).to_a.join(";")
 end
 
-def setup_msvc_env(arch: 'x64', sdk: nil, toolset: nil, uwp: false, spectre: false, vs_version: nil)
+def setup_msvc_env(arch: "x64", sdk: nil, toolset: nil, uwp: false, spectre: false, vs_version: nil)
   begin
     vcvarsall_path = find_vcvarsall(vs_version)
     puts "[INFO] MSVC: Found vcvarsall.bat at: #{vcvarsall_path}"
@@ -81,7 +80,7 @@ def setup_msvc_env(arch: 'x64', sdk: nil, toolset: nil, uwp: false, spectre: fal
   end
 
   vcvars_args = [arch]
-  vcvars_args << 'uwp' if uwp
+  vcvars_args << "uwp" if uwp
   vcvars_args << sdk if sdk
   vcvars_args << "-vcvars_ver=#{toolset}" if toolset
   vcvars_args << "-vcvars_spectre_libs=spectre" if spectre
@@ -109,7 +108,7 @@ def setup_msvc_env(arch: 'x64', sdk: nil, toolset: nil, uwp: false, spectre: fal
 
   before_env_lines = output_parts[0].lines
   vcvars_out_lines = output_parts[1].lines
-  after_env_lines  = output_parts[2].lines
+  after_env_lines = output_parts[2].lines
 
   error_messages = vcvars_out_lines.map(&:strip).select do |line|
     line.match?(/^\[ERROR.*\]/i) && !line.match?(/Error in script usage. The correct usage is:/)
@@ -275,7 +274,7 @@ end
 begin
   if RUBY_PLATFORM.match?(/mingw|mswin/i)
     puts "[INFO] Windows platform detected. Attempting MSVC environment setup..."
-    setup_msvc_env()
+    setup_msvc_env
     puts "[INFO] MSVC environment setup complete. Continuing build."
   else
     puts "[INFO] Non-Windows platform detected. Skipping MSVC setup."
@@ -310,7 +309,7 @@ context = get_context
 
 begin
   Dir.foreach(start_directory) do |entry|
-    next if entry == '.' || entry == '..'
+    next if entry == "." || entry == ".."
     entry_path = File.join(start_directory, entry)
 
     if File.file?(entry_path)

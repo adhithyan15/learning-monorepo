@@ -1,5 +1,3 @@
-require 'set'
-
 class FileProcessingHistory
   def initialize
     @processed_files = Set.new

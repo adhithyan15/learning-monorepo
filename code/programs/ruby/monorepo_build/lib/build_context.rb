@@ -1,4 +1,4 @@
-require_relative 'file_processing_history'
+require_relative "file_processing_history"
 
 class BuildContext
   attr_reader :file_processing_history

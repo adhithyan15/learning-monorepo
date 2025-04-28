@@ -1,5 +1,5 @@
-require_relative 'file_processing_history'
-require_relative 'build_context'
+require_relative "file_processing_history"
+require_relative "build_context"
 
 def get_context
   file_history = FileProcessingHistory.new

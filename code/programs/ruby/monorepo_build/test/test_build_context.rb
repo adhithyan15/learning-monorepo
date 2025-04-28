@@ -1,6 +1,6 @@
-require 'minitest/autorun'
-require_relative '../lib/build_context'
-require_relative '../lib/file_processing_history'
+require "minitest/autorun"
+require_relative "../lib/build_context"
+require_relative "../lib/file_processing_history"
 
 class BuildContextTest < Minitest::Test
   def setup
@@ -12,7 +12,7 @@ class BuildContextTest < Minitest::Test
   end
 
   def test_file_processing_history_behavior
-    path = 'some/build/file'
+    path = "some/build/file"
     refute @context.file_processing_history.already_processed?(path)
     @context.file_processing_history.mark_processed(path)
     assert @context.file_processing_history.already_processed?(path)
