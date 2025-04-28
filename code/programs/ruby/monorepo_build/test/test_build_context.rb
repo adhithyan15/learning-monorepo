@@ -1,9 +1,10 @@
 require 'minitest/autorun'
 require_relative '../lib/build_context'
+require_relative '../lib/file_processing_history'
 
 class BuildContextTest < Minitest::Test
   def setup
-    @context = BuildContext.new
+    @context = BuildContext.new(file_processing_history: FileProcessingHistory.new)
   end
 
   def test_file_processing_history_exists

@@ -1,9 +1,13 @@
 require 'open3'
+require 'set'
 require 'pathname'
-require_relative 'lib/build_context'
-require_relative 'lib/file_processing_history'
 
-puts "[INFO] Starting the build process..."
+require_relative 'lib/get_context'
+
+# --- Configuration ---
+BUILD_FILE_PATTERN = /^BUILD(?:_windows|_mac_and_linux|_mac|_linux)?$/
+DIRS_FILE_NAME = "DIRS"
+BUILD_COMMENT_CHAR = '#'
 
 # ==================================================
 # MSVC Environment Setup Code (for Windows)
@@ -152,11 +156,6 @@ end
 # End of MSVC Environment Setup Code
 # ==================================================
 
-# --- Configuration ---
-BUILD_FILE_PATTERN = /^BUILD(?:_windows|_mac_and_linux|_mac|_linux)?$/
-DIRS_FILE_NAME = "DIRS"
-BUILD_COMMENT_CHAR = '#'
-
 # --- Helper Functions ---
 
 def execute_command(command, current_working_directory)
@@ -195,8 +194,6 @@ def check_os_match(build_file_path)
   end
 end
 
-# --- Core Processing Functions ---
-
 def process_build_file(build_file_path)
   absolute_path = File.absolute_path(build_file_path)
 
@@ -234,10 +231,10 @@ def process_dirs_file(dirs_file_path, context)
   context.file_processing_history.mark_processed(absolute_path)
 
   puts "[INFO] Processing DIRS file: #{absolute_path}"
-  current_directory = File.dirname(absolute_path)
+  current_directory = File.dirname(dirs_file_path)
 
   begin
-    dirs_file_contents = File.readlines(absolute_path)
+    dirs_file_contents = File.readlines(dirs_file_path)
     dirs_file_contents.each do |next_dir_rel_path|
       stripped_path = next_dir_rel_path.strip
       next if stripped_path.empty? || stripped_path.start_with?(BUILD_COMMENT_CHAR)
@@ -289,10 +286,10 @@ rescue => e
   exit(1)
 end
 
-# --- Shortcut Mode: Build a Single BUILD File ---
 if ARGV.length == 1
   user_provided_path = ARGV[0]
   if File.file?(user_provided_path) && File.basename(user_provided_path).match?(BUILD_FILE_PATTERN)
+    context = get_context
     absolute_path = File.absolute_path(user_provided_path)
     puts "[INFO] User requested single BUILD file execution:"
     puts "[INFO] > #{absolute_path}"
@@ -309,7 +306,7 @@ end
 start_directory = Dir.pwd
 puts "[INFO] Starting build scan in: #{start_directory}"
 
-context = BuildContext.new
+context = get_context
 
 begin
   Dir.foreach(start_directory) do |entry|
