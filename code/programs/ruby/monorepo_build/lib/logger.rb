@@ -1,22 +1,25 @@
 class Logger
-    def info(message)
-        puts "[INFO] #{message}"
-    end
+  def initialize(processor:)
+    @processor = processor
+  end
 
-    def warn(message)
-        puts "[WARN] #{message}"
-    end
+  def info(message)
+    @processor.process(level: :info, message: message)
+  end
 
-    def error(message)
-        puts "[ERR] #{message}"
-    end
+  def warn(message)
+    @processor.process(level: :warn, message: message)
+  end
 
-    def fatal(message)
-        puts "[FATAL ERR] #{message}"
-    end
+  def error(message)
+    @processor.process(level: :error, message: message)
+  end
 
-    def debug(message)
-        puts "[DEBUG] #{message}"
-    end
+  def fatal(message)
+    @processor.process(level: :fatal, message: message)
+  end
+
+  def debug(message)
+    @processor.process(level: :debug, message: message)
+  end
 end
-  
