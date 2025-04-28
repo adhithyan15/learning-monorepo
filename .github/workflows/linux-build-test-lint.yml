@@ -15,7 +15,7 @@ jobs:
       - run: sudo apt update
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
+          ruby-version: '3.2'
           bundler-cache: true
       - run: go version
       - run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -y 1

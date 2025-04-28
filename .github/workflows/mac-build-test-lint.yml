@@ -14,7 +14,7 @@ jobs:
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
+          ruby-version: '3.2'
           bundler-cache: true
       - run: brew install go
       - run: go version

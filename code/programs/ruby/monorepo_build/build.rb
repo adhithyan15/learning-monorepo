@@ -57,6 +57,7 @@ def parse_env(set_output_lines)
     line.strip!
     parts = line.split("=", 2)
     next unless parts.length == 2 && !parts[0].empty?
+
     env_hash[parts[0]] = parts[1]
   end
   env_hash
@@ -138,17 +139,17 @@ def setup_msvc_env(arch: "x64", sdk: nil, toolset: nil, uwp: false, spectre: fal
       end
 
       final_value = if is_path_variable?(key)
-        filter_path_value(new_value)
-      else
-        new_value
-      end
+                      filter_path_value(new_value)
+                    else
+                      new_value
+                    end
 
       ENV[key] = final_value
     end
   end
 
   puts "[INFO] MSVC: Environment configured successfully."
-  puts "[INFO] MSVC: #{new_vars} new variables, #{changed_vars} changed variables applied to current process environment."
+  puts "[INFO] MSVC: #{new_vars} new variables, #{changed_vars} changed variables applied to current environment."
 end
 
 # ==================================================
@@ -197,7 +198,8 @@ def process_build_file(build_file_path)
   absolute_path = File.absolute_path(build_file_path)
 
   unless check_os_match(absolute_path)
-    puts "[INFO] Skipping BUILD file #{File.basename(absolute_path)} in #{File.dirname(absolute_path)} due to OS mismatch."
+    puts "[INFO] Skipping BUILD file #{File.basename(absolute_path)} in #{File.dirname(absolute_path)}"
+    puts "[INFO] OS doesn't match the OS required by the BUILD file."
     return
   end
 
@@ -209,6 +211,7 @@ def process_build_file(build_file_path)
     build_file_contents.each_with_index do |line, index|
       command = line.strip
       next if command.empty? || command.start_with?(BUILD_COMMENT_CHAR)
+
       execute_command(command, current_directory)
     end
   rescue Errno::ENOENT
@@ -247,6 +250,7 @@ def process_dirs_file(dirs_file_path, context)
 
       Dir.foreach(full_next_dir_path) do |entry|
         next if entry == "." || entry == ".."
+
         full_entry_path = File.join(full_next_dir_path, entry)
 
         if File.file?(full_entry_path)
@@ -310,6 +314,7 @@ context = get_context
 begin
   Dir.foreach(start_directory) do |entry|
     next if entry == "." || entry == ".."
+
     entry_path = File.join(start_directory, entry)
 
     if File.file?(entry_path)
