@@ -3,4 +3,4 @@ ruby test/test_build_context.rb
 ruby test/test_logger.rb
 ruby test/test_standard_stream_log_processor.rb
 bundle install --path vendor/bundle
-bundle exec rubocop --debug
+bundle exec rubocop
