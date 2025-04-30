@@ -15,7 +15,6 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3.0'
-          bundler-cache: true
       - name: Installing necessary software and running the build script
         shell: pwsh
         run: |
