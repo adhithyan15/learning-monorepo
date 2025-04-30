@@ -2,10 +2,10 @@ class MemoryProcessor
   attr_reader :logs
 
   def initialize
-      @logs = []
+    @logs = []
   end
 
   def process(level:, message:)
-      @logs << { level: level, message: message }
+    @logs << { level: level, message: message }
   end
 end

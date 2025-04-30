@@ -14,11 +14,11 @@ jobs:
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
-          bundler-cache: true
+          ruby-version: '3.3.0'
       - name: Installing necessary software and running the build script
         shell: pwsh
         run: |
+          ruby -v
           go version
           choco install rust
           choco install llvm
@@ -53,5 +53,4 @@ jobs:
           cmake --version
           choco install ninja
           ninja --version
-          gem install rubocop --no-document
           ruby code\programs\ruby\monorepo_build\build.rb

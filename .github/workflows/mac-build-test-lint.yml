@@ -14,8 +14,8 @@ jobs:
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
-          bundler-cache: true
+          ruby-version: '3.3.0'
+      - run: ruby -v
       - run: brew install go
       - run: go version
       - run: brew install rust
@@ -57,5 +57,4 @@ jobs:
       - run: cmake --version
       - run: brew install ninja
       - run: ninja --version
-      - run: gem install rubocop --no-document
       - run: ruby code/programs/ruby/monorepo_build/build.rb
