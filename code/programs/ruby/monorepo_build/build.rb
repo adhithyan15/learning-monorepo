@@ -163,12 +163,15 @@ def execute_command(command, current_working_directory)
   puts "[CMD] In '#{current_working_directory}': #{command}"
   stdout_str, stderr_str, status = Open3.capture3(ENV, command, chdir: current_working_directory)
 
-  if status.success?
-    puts "[OUT] #{stdout_str.strip}" unless stdout_str.strip.empty?
-  else
-    puts "[OUT] #{stdout_str.strip}" unless stdout_str.strip.empty?
+  unless stdout_str.strip.empty?
+    puts "[OUT] #{stdout_str}"
+  end
+
+  unless status.success?
     puts "[ERR] Command failed! (Exit Status: #{status.exitstatus})"
-    puts "[ERR] #{stderr_str.strip}" unless stderr_str.strip.empty?
+    unless stderr_str.strip.empty?
+      puts "[ERR] #{stderr_str}"
+    end
     exit(status.exitstatus)
   end
 rescue => e
