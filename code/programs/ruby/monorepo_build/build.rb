@@ -166,6 +166,7 @@ def execute_command(command, current_working_directory)
   if status.success?
     puts "[OUT] #{stdout_str.strip}" unless stdout_str.strip.empty?
   else
+    puts "[OUT] #{stdout_str.strip}" unless stdout_str.strip.empty?
     puts "[ERR] Command failed! (Exit Status: #{status.exitstatus})"
     puts "[ERR] #{stderr_str.strip}" unless stderr_str.strip.empty?
     exit(status.exitstatus)
