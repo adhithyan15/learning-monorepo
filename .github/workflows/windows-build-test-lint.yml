@@ -53,5 +53,4 @@ jobs:
           cmake --version
           choco install ninja
           ninja --version
-          gem install rubocop --no-document
           ruby code\programs\ruby\monorepo_build\build.rb
