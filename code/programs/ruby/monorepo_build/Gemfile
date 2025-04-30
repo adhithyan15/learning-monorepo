@@ -2,4 +2,7 @@
 
 source "https://rubygems.org"
 
+# Specify the Ruby version required
+ruby "3.3.0"
+
 gem "rubocop", "~> 1.75"
