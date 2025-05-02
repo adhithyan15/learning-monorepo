@@ -56,6 +56,7 @@ jobs:
       - name: Install Wasmtime
         run: |
           curl https://wasmtime.dev/install.sh -sSf | bash
+          echo "$HOME/.wasmtime/bin" >> $GITHUB_PATH
       - run: wasmtime --version
       - run: composer -v
       - run: cmake --version

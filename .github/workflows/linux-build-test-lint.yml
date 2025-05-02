@@ -65,6 +65,7 @@ jobs:
       - name: Install Wasmtime
         run: |
           curl https://wasmtime.dev/install.sh -sSf | bash
+          echo "$HOME/.wasmtime/bin" >> $GITHUB_PATH
       - run: wasmtime --version
       - run: sudo apt-get install ninja-build
       - run: sudo apt-get -y install podman
