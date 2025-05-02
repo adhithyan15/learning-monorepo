@@ -16,15 +16,6 @@ jobs:
         with:
           ruby-version: '3.3'
           bundler-cache: true
-      - name: Download Wasmtime
-        shell: bash
-        run: |
-          WASMTIME_VERSION=v14.0.0
-          OS=$(uname | tr '[:upper:]' '[:lower:]')
-          ARCHIVE_NAME="wasmtime-${WASMTIME_VERSION}-${OS}-x86_64"
-          curl -LO https://github.com/bytecodealliance/wasmtime/releases/download/${WASMTIME_VERSION}/${ARCHIVE_NAME}.tar.xz
-          tar xf ${ARCHIVE_NAME}.tar.xz
-          echo "$PWD/${ARCHIVE_NAME}" >> $GITHUB_PATH
       - name: Installing necessary software and running the build script
         shell: pwsh
         run: |
@@ -62,6 +53,6 @@ jobs:
           cmake --version
           choco install ninja
           ninja --version
-          wasmtime --version
+          wasmtime
           gem install rubocop --no-document
           ruby code\programs\ruby\monorepo_build\build.rb

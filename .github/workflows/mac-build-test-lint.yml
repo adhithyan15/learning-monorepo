@@ -53,15 +53,9 @@ jobs:
         run: |
           curl -sS https://getcomposer.org/installer | php
           sudo mv composer.phar /usr/local/bin/composer
-      - name: Download Wasmtime
-        shell: bash
+      - name: Install Wasmtime
         run: |
-          WASMTIME_VERSION=v32.0.0
-          OS=$(uname | tr '[:upper:]' '[:lower:]')
-          ARCHIVE_NAME="wasmtime-${WASMTIME_VERSION}-${OS}-x86_64"
-          curl -LO https://github.com/bytecodealliance/wasmtime/releases/download/${WASMTIME_VERSION}/${ARCHIVE_NAME}.tar.xz
-          tar xf ${ARCHIVE_NAME}.tar.xz
-          echo "$PWD/${ARCHIVE_NAME}" >> $GITHUB_PATH
+          curl https://wasmtime.dev/install.sh -sSf | bash
       - run: wasmtime --version
       - run: composer -v
       - run: cmake --version
