@@ -16,11 +16,15 @@ jobs:
         with:
           ruby-version: '3.3'
           bundler-cache: true
-      - name: Install Wasmtime
+      - name: Download Wasmtime
         shell: bash
         run: |
-          curl https://wasmtime.dev/install.sh -sSf | bash
-          echo "$HOME/.wasmtime/bin" >> $GITHUB_PATH
+          WASMTIME_VERSION=v14.0.0
+          OS=$(uname | tr '[:upper:]' '[:lower:]')
+          ARCHIVE_NAME="wasmtime-${WASMTIME_VERSION}-${OS}-x86_64"
+          curl -LO https://github.com/bytecodealliance/wasmtime/releases/download/${WASMTIME_VERSION}/${ARCHIVE_NAME}.tar.xz
+          tar xf ${ARCHIVE_NAME}.tar.xz
+          echo "$PWD/${ARCHIVE_NAME}" >> $GITHUB_PATH
       - name: Installing necessary software and running the build script
         shell: pwsh
         run: |

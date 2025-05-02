@@ -62,11 +62,15 @@ jobs:
           curl -sS https://getcomposer.org/installer | php
           sudo mv composer.phar /usr/local/bin/composer
       - run: composer -v
-      - name: Install Wasmtime
+      - name: Download Wasmtime
         shell: bash
         run: |
-          curl https://wasmtime.dev/install.sh -sSf | bash
-          echo "$HOME/.wasmtime/bin" >> $GITHUB_PATH
+          WASMTIME_VERSION=v14.0.0
+          OS=$(uname | tr '[:upper:]' '[:lower:]')
+          ARCHIVE_NAME="wasmtime-${WASMTIME_VERSION}-${OS}-x86_64"
+          curl -LO https://github.com/bytecodealliance/wasmtime/releases/download/${WASMTIME_VERSION}/${ARCHIVE_NAME}.tar.xz
+          tar xf ${ARCHIVE_NAME}.tar.xz
+          echo "$PWD/${ARCHIVE_NAME}" >> $GITHUB_PATH
       - run: wasmtime --version
       - run: sudo apt-get install ninja-build
       - run: sudo apt-get -y install podman
