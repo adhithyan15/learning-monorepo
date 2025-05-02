@@ -62,6 +62,12 @@ jobs:
           curl -sS https://getcomposer.org/installer | php
           sudo mv composer.phar /usr/local/bin/composer
       - run: composer -v
+      - name: Install Wasmtime
+        shell: bash
+        run: |
+          curl https://wasmtime.dev/install.sh -sSf | bash
+          echo "$HOME/.wasmtime/bin" >> $GITHUB_PATH
+      - run: wasmtime --version
       - run: sudo apt-get install ninja-build
       - run: sudo apt-get -y install podman
       - run: sudo gem install rubocop --no-document

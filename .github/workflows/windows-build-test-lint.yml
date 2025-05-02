@@ -16,6 +16,11 @@ jobs:
         with:
           ruby-version: '3.3'
           bundler-cache: true
+      - name: Install Wasmtime
+        shell: bash
+        run: |
+          curl https://wasmtime.dev/install.sh -sSf | bash
+          echo "$HOME/.wasmtime/bin" >> $GITHUB_PATH
       - name: Installing necessary software and running the build script
         shell: pwsh
         run: |
@@ -53,5 +58,6 @@ jobs:
           cmake --version
           choco install ninja
           ninja --version
+          wasmtime --version
           gem install rubocop --no-document
           ruby code\programs\ruby\monorepo_build\build.rb
