@@ -6,7 +6,7 @@ require_relative 'lib/get_context'
 
 # --- Configuration ---
 BUILD_FILE_PATTERN = /^BUILD(?:_windows|_mac_and_linux|_mac|_linux)?$/
-DIRS_FILE_NAME = "DIRS"
+DIRS_FILE_NAME = 'DIRS'
 BUILD_COMMENT_CHAR = '#'
 
 # ==================================================
@@ -20,10 +20,10 @@ def find_vswhere
   output, status = Open3.capture2('where vswhere.exe')
   return output.lines.first.strip if status.success? && !output.empty?
 
-  raise "vswhere.exe not found at standard location or in PATH. Cannot locate Visual Studio."
+  raise 'vswhere.exe not found at standard location or in PATH. Cannot locate Visual Studio.'
 end
 
-def find_vcvarsall(vs_version = nil)
+def find_vcvarsall(context, vs_version = nil)
   vswhere_exe = find_vswhere
 
   cmd = [
@@ -58,6 +58,7 @@ def parse_env(set_output_lines)
     line.strip!
     parts = line.split('=', 2)
     next unless parts.length == 2 && !parts[0].empty?
+
     env_hash[parts[0]] = parts[1]
   end
   env_hash
@@ -71,12 +72,12 @@ def filter_path_value(path_string)
   Set.new(path_string.split(';').reject(&:empty?)).to_a.join(';')
 end
 
-def setup_msvc_env(arch: 'x64', sdk: nil, toolset: nil, uwp: false, spectre: false, vs_version: nil)
+def setup_msvc_env(context, arch: 'x64', sdk: nil, toolset: nil, uwp: false, spectre: false, vs_version: nil)
   begin
-    vcvarsall_path = find_vcvarsall(vs_version)
-    puts "[INFO] MSVC: Found vcvarsall.bat at: #{vcvarsall_path}"
+    vcvarsall_path = find_vcvarsall(context, vs_version)
+    context.logger.info("MSVC: Found vcvarsall.bat at: #{vcvarsall_path}")
   rescue => e
-    puts "[ERR] MSVC: Failed to find vcvarsall.bat: #{e.message}"
+    context.logger.error("MSVC: Failed to find vcvarsall.bat: #{e.message}")
     raise
   end
 
@@ -87,69 +88,54 @@ def setup_msvc_env(arch: 'x64', sdk: nil, toolset: nil, uwp: false, spectre: fal
   vcvars_args << '-vcvars_spectre_libs=spectre' if spectre
 
   vcvars_command = %("#{vcvarsall_path}" #{vcvars_args.join(' ')})
-  puts "[INFO] MSVC: vcvars command line: #{vcvars_command}"
+  context.logger.info("MSVC: vcvars command line: #{vcvars_command}")
 
   full_command = "set && cls && #{vcvars_command} && cls && set"
-  puts "[DEBUG] MSVC: Executing: #{full_command}"
+  context.logger.debug("MSVC: Executing: #{full_command}")
   output, status = Open3.capture2e("cmd /c \"#{full_command}\"")
 
   unless status.success?
-    puts "[WARN] MSVC: Environment capture command execution might have failed. Status: #{status.exitstatus}"
-    puts "[WARN] MSVC: Output was:\n#{output}"
+    context.logger.warn("MSVC: Environment capture command execution might have failed. Status: #{status.exitstatus}")
+    context.logger.warn("MSVC: Output was:\n#{output}")
     raise "Failed to execute MSVC environment capture command. Status: #{status.exitstatus}" if status.exitstatus != 0
   end
 
   output_parts = output.split("\f")
   unless output_parts.length == 3
-    puts "[ERR] MSVC: Unexpected output format when splitting by form feed (cls)."
-    puts "[ERR] MSVC: Expected 3 parts, got #{output_parts.length}."
-    puts "[ERR] MSVC: Full output:\n#{output}"
-    raise "Failed to parse MSVC environment capture output."
+    context.logger.error('MSVC: Unexpected output format when splitting by form feed (cls).')
+    context.logger.error("MSVC: Expected 3 parts, got #{output_parts.length}.")
+    context.logger.error("MSVC: Full output:\n#{output}")
+    raise 'Failed to parse MSVC environment capture output.'
   end
 
-  before_env_lines = output_parts[0].lines
+  before_env = parse_env(output_parts[0].lines)
   vcvars_out_lines = output_parts[1].lines
-  after_env_lines  = output_parts[2].lines
+  after_env = parse_env(output_parts[2].lines)
 
   error_messages = vcvars_out_lines.map(&:strip).select do |line|
     line.match?(/^\[ERROR.*\]/i) && !line.match?(/Error in script usage. The correct usage is:/)
   end
 
   unless error_messages.empty?
-    puts "[ERR] MSVC: vcvarsall.bat reported errors:"
-    error_messages.each { |err| puts "- #{err}" }
-    raise "vcvarsall.bat failed with errors. See log for details."
+    context.logger.error('MSVC: vcvarsall.bat reported errors:')
+    error_messages.each { |err| context.logger.error("- #{err}") }
+    raise 'vcvarsall.bat failed with errors. See log for details.'
   end
 
-  puts "[INFO] MSVC: Processing environment variables..."
-  before_env = parse_env(before_env_lines)
-  after_env = parse_env(after_env_lines)
-
+  context.logger.info('MSVC: Processing environment variables...')
   changed_vars = 0
   new_vars = 0
 
   after_env.each do |key, new_value|
     old_value = before_env[key]
+    next if new_value == old_value
 
-    if new_value != old_value
-      if old_value.nil?
-        new_vars += 1
-      else
-        changed_vars += 1
-      end
-
-      final_value = if is_path_variable?(key)
-                      filter_path_value(new_value)
-                    else
-                      new_value
-                    end
-
-      ENV[key] = final_value
-    end
+    old_value.nil? ? new_vars += 1 : changed_vars += 1
+    ENV[key] = is_path_variable?(key) ? filter_path_value(new_value) : new_value
   end
 
-  puts "[INFO] MSVC: Environment configured successfully."
-  puts "[INFO] MSVC: #{new_vars} new variables, #{changed_vars} changed variables applied to current process environment."
+  context.logger.info('MSVC: Environment configured successfully.')
+  context.logger.info("MSVC: #{new_vars} new variables, #{changed_vars} changed variables applied to current process environment.")
 end
 
 # ==================================================
@@ -158,27 +144,27 @@ end
 
 # --- Helper Functions ---
 
-def execute_command(command, current_working_directory)
-  puts "[CMD] In '#{current_working_directory}': #{command}"
+def execute_command(context, command, current_working_directory)
+  context.logger.info("CMD: In '#{current_working_directory}': #{command}")
   stdout_str, stderr_str, status = Open3.capture3(ENV, command, chdir: current_working_directory)
 
-  puts "[OUT] #{stdout_str.strip}" unless stdout_str.strip.empty?
+  context.logger.info(stdout_str.strip) unless stdout_str.strip.empty?
 
   unless status.success?
-    puts "[ERR] Command failed! (Exit Status: #{status.exitstatus})"
-    puts "[ERR] #{stderr_str.strip}" unless stderr_str.strip.empty?
+    context.logger.error("Command failed! (Exit Status: #{status.exitstatus})")
+    context.logger.error(stderr_str.strip) unless stderr_str.strip.empty?
     exit(status.exitstatus)
   end
 rescue => e
-  puts "[ERR] Failed to execute command '#{command}' in '#{current_working_directory}': #{e.message}"
+  context.logger.error("Failed to execute command '#{command}' in '#{current_working_directory}': #{e.message}")
   exit(1)
 end
 
 def check_os_match(build_file_path)
   filename = File.basename(build_file_path)
   is_windows = RUBY_PLATFORM.match?(/mingw|mswin/i)
-  is_mac = RUBY_PLATFORM.include?("darwin")
-  is_linux = !is_windows && !is_mac && RUBY_PLATFORM.include?("linux")
+  is_mac = RUBY_PLATFORM.include?('darwin')
+  is_linux = !is_windows && !is_mac && RUBY_PLATFORM.include?('linux')
 
   case filename
   when /_windows$/
@@ -194,55 +180,52 @@ def check_os_match(build_file_path)
   end
 end
 
-def process_build_file(build_file_path)
+def process_build_file(context, build_file_path)
   absolute_path = File.absolute_path(build_file_path)
 
   unless check_os_match(absolute_path)
-    puts "[INFO] Skipping BUILD file #{File.basename(absolute_path)} in #{File.dirname(absolute_path)} due to OS mismatch."
+    context.logger.info("Skipping BUILD file #{File.basename(absolute_path)} in #{File.dirname(absolute_path)} due to OS mismatch.")
     return
   end
 
-  puts "[INFO] Processing BUILD file: #{absolute_path}"
+  context.logger.info("Processing BUILD file: #{absolute_path}")
   current_directory = File.dirname(absolute_path)
 
   begin
-    build_file_contents = File.readlines(absolute_path)
-    build_file_contents.each_with_index do |line, index|
+    File.readlines(absolute_path).each_with_index do |line, _index|
       command = line.strip
       next if command.empty? || command.start_with?(BUILD_COMMENT_CHAR)
-      execute_command(command, current_directory)
+      execute_command(context, command, current_directory)
     end
   rescue Errno::ENOENT
-    puts "[ERR] Build file not found: #{absolute_path}"
+    context.logger.error("Build file not found: #{absolute_path}")
     exit(1)
   rescue => e
-    puts "[ERR] Error reading build file #{absolute_path}: #{e.message}"
+    context.logger.error("Error reading build file #{absolute_path}: #{e.message}")
     exit(1)
   end
 end
 
-def process_dirs_file(dirs_file_path, context)
+def process_dirs_file(context, dirs_file_path)
   absolute_path = File.absolute_path(dirs_file_path)
 
   if context.file_processing_history.already_processed?(absolute_path)
-    puts "[WARN] Already processed DIRS file #{absolute_path}, skipping to prevent infinite loop."
+    context.logger.warn("Already processed DIRS file #{absolute_path}, skipping to prevent infinite loop.")
     return
   end
   context.file_processing_history.mark_processed(absolute_path)
 
-  puts "[INFO] Processing DIRS file: #{absolute_path}"
+  context.logger.info("Processing DIRS file: #{absolute_path}")
   current_directory = File.dirname(dirs_file_path)
 
   begin
-    dirs_file_contents = File.readlines(dirs_file_path)
-    dirs_file_contents.each do |next_dir_rel_path|
+    File.readlines(dirs_file_path).each do |next_dir_rel_path|
       stripped_path = next_dir_rel_path.strip
       next if stripped_path.empty? || stripped_path.start_with?(BUILD_COMMENT_CHAR)
 
       full_next_dir_path = File.absolute_path(File.join(current_directory, stripped_path))
-
       unless Dir.exist?(full_next_dir_path)
-        puts "[WARN] Directory '#{full_next_dir_path}' listed in #{absolute_path} not found. Skipping."
+        context.logger.warn("Directory '#{full_next_dir_path}' listed in #{absolute_path} not found. Skipping.")
         next
       end
 
@@ -252,61 +235,59 @@ def process_dirs_file(dirs_file_path, context)
 
         if File.file?(full_entry_path)
           filename = File.basename(full_entry_path)
-
           if filename == DIRS_FILE_NAME
-            process_dirs_file(full_entry_path, context)
+            process_dirs_file(context, full_entry_path)
           elsif filename.match?(BUILD_FILE_PATTERN)
-            process_build_file(full_entry_path)
+            process_build_file(context, full_entry_path)
           end
         end
       end
     end
   rescue Errno::ENOENT
-    puts "[ERR] DIRS file not found: #{absolute_path}"
+    context.logger.error("DIRS file not found: #{absolute_path}")
     exit(1)
   rescue => e
-    puts "[ERR] Error reading DIRS file #{absolute_path}: #{e.message}"
+    context.logger.error("Error reading DIRS file #{absolute_path}: #{e.message}")
     exit(1)
   end
 end
 
 # --- Main Execution Logic ---
 
+context = get_context
+
 begin
   if RUBY_PLATFORM.match?(/mingw|mswin/i)
-    puts "[INFO] Windows platform detected. Attempting MSVC environment setup..."
-    setup_msvc_env()
-    puts "[INFO] MSVC environment setup complete. Continuing build."
+    context.logger.info('Windows platform detected. Attempting MSVC environment setup...')
+    setup_msvc_env(context)
+    context.logger.info('MSVC environment setup complete. Continuing build.')
   else
-    puts "[INFO] Non-Windows platform detected. Skipping MSVC setup."
+    context.logger.info('Non-Windows platform detected. Skipping MSVC setup.')
   end
 rescue => e
-  puts "[FATAL ERR] Failed during MSVC environment setup: #{e.message}"
-  puts e.backtrace.join("\n")
+  context.logger.fatal("Failed during MSVC environment setup: #{e.message}")
+  context.logger.fatal(e.backtrace.join("\n"))
   exit(1)
 end
 
 if ARGV.length == 1
   user_provided_path = ARGV[0]
   if File.file?(user_provided_path) && File.basename(user_provided_path).match?(BUILD_FILE_PATTERN)
-    context = get_context
     absolute_path = File.absolute_path(user_provided_path)
-    puts "[INFO] User requested single BUILD file execution:"
-    puts "[INFO] > #{absolute_path}"
-    process_build_file(absolute_path)
-    puts "\n--------------------------------"
-    puts "[INFO] Single BUILD file finished successfully."
+    context.logger.info('User requested single BUILD file execution:')
+    context.logger.info("> #{absolute_path}")
+    process_build_file(context, absolute_path)
+    context.logger.info('--------------------------------')
+    context.logger.info('Single BUILD file finished successfully.')
     exit(0)
   else
-    puts "[ERR] Provided path is not a valid BUILD file: #{user_provided_path}"
+    context.logger.error("Provided path is not a valid BUILD file: #{user_provided_path}")
     exit(1)
   end
 end
 
 start_directory = Dir.pwd
-puts "[INFO] Starting build scan in: #{start_directory}"
-
-context = get_context
+context.logger.info("Starting build scan in: #{start_directory}")
 
 begin
   Dir.foreach(start_directory) do |entry|
@@ -316,18 +297,18 @@ begin
     if File.file?(entry_path)
       filename = File.basename(entry_path)
       if filename == DIRS_FILE_NAME
-        process_dirs_file(entry_path, context)
+        process_dirs_file(context, entry_path)
       elsif filename.match?(BUILD_FILE_PATTERN)
-        process_build_file(entry_path)
+        process_build_file(context, entry_path)
       end
     end
   end
 rescue => e
-  puts "[ERR] An unexpected error occurred during initial scan: #{e.message}"
-  puts e.backtrace.join("\n")
+  context.logger.error("An unexpected error occurred during initial scan: #{e.message}")
+  context.logger.error(e.backtrace.join("\n"))
   exit(1)
 end
 
-puts "\n--------------------------------"
-puts "[INFO] Build finished successfully."
+context.logger.info('--------------------------------')
+context.logger.info('Build finished successfully.')
 exit(0)
