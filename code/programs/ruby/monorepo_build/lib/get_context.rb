@@ -5,7 +5,7 @@ require_relative 'logger'
 require_relative 'exit_handler'
 
 def get_context
-  log_processor = DefaultStandardStreamLogProcessor.new
+  log_processor = default_standard_stream_log_processor
   logger = Logger.new(log_processor)
   file_processing_history = FileProcessingHistory.new
   exit_handler = ExitHandler.new
