@@ -153,11 +153,11 @@ def execute_command(context, command, current_working_directory)
   unless status.success?
     context.logger.error("Command failed! (Exit Status: #{status.exitstatus})")
     context.logger.error(stderr_str.strip) unless stderr_str.strip.empty?
-    exit(status.exitstatus)
+    context.exit_handler.exit(status.exitstatus)
   end
 rescue => e
   context.logger.error("Failed to execute command '#{command}' in '#{current_working_directory}': #{e.message}")
-  exit(1)
+  context.exit_handler.exit(1)
 end
 
 def check_os_match(build_file_path)
@@ -192,17 +192,17 @@ def process_build_file(context, build_file_path)
   current_directory = File.dirname(absolute_path)
 
   begin
-    File.readlines(absolute_path).each_with_index do |line, _index|
+    File.readlines(absolute_path).each do |line|
       command = line.strip
       next if command.empty? || command.start_with?(BUILD_COMMENT_CHAR)
       execute_command(context, command, current_directory)
     end
   rescue Errno::ENOENT
     context.logger.error("Build file not found: #{absolute_path}")
-    exit(1)
+    context.exit_handler.exit(1)
   rescue => e
     context.logger.error("Error reading build file #{absolute_path}: #{e.message}")
-    exit(1)
+    context.exit_handler.exit(1)
   end
 end
 
@@ -245,10 +245,10 @@ def process_dirs_file(context, dirs_file_path)
     end
   rescue Errno::ENOENT
     context.logger.error("DIRS file not found: #{absolute_path}")
-    exit(1)
+    context.exit_handler.exit(1)
   rescue => e
     context.logger.error("Error reading DIRS file #{absolute_path}: #{e.message}")
-    exit(1)
+    context.exit_handler.exit(1)
   end
 end
 
@@ -267,7 +267,7 @@ begin
 rescue => e
   context.logger.fatal("Failed during MSVC environment setup: #{e.message}")
   context.logger.fatal(e.backtrace.join("\n"))
-  exit(1)
+  context.exit_handler.exit(1)
 end
 
 if ARGV.length == 1
@@ -279,10 +279,10 @@ if ARGV.length == 1
     process_build_file(context, absolute_path)
     context.logger.info('--------------------------------')
     context.logger.info('Single BUILD file finished successfully.')
-    exit(0)
+    context.exit_handler.exit(0)
   else
     context.logger.error("Provided path is not a valid BUILD file: #{user_provided_path}")
-    exit(1)
+    context.exit_handler.exit(1)
   end
 end
 
@@ -306,9 +306,9 @@ begin
 rescue => e
   context.logger.error("An unexpected error occurred during initial scan: #{e.message}")
   context.logger.error(e.backtrace.join("\n"))
-  exit(1)
+  context.exit_handler.exit(1)
 end
 
 context.logger.info('--------------------------------')
 context.logger.info('Build finished successfully.')
-exit(0)
+context.exit_handler.exit(0)
