@@ -2,15 +2,20 @@ require 'minitest/autorun'
 require_relative '../lib/build_context'
 require_relative '../lib/file_processing_history'
 require_relative '../lib/logger'
+require_relative '../lib/exit_handler'
 require_relative "memory_processor"
 
 class BuildContextTest < Minitest::Test
   def setup
     processor = MemoryProcessor.new
     logger = Logger.new(processor: processor)
+    file_processing_history = FileProcessingHistory.new
+    exit_handler = ExitHandler.new
+
     @context = BuildContext.new(
-      file_processing_history: FileProcessingHistory.new,
-      logger: logger
+      file_processing_history: file_processing_history,
+      logger: logger,
+      exit_handler: exit_handler
     )
   end
 

@@ -1,12 +1,19 @@
+# lib/get_context.rb
 require_relative 'file_processing_history'
-require_relative 'build_context'
+require_relative 'default_standard_stream_log_processor'
 require_relative 'logger'
-require_relative "default_standard_stream_log_processor"
+require_relative 'exit_handler'
+require_relative 'build_context'
 
 def get_context
-  logger = Logger.new(processor: default_standard_stream_log_processor)
+  log_processor = default_standard_stream_log_processor
+  logger = Logger.new(processor: log_processor)
+  file_processing_history = FileProcessingHistory.new
+  exit_handler = ExitHandler.new
+
   BuildContext.new(
-    file_processing_history: FileProcessingHistory.new,
-    logger: logger
+    file_processing_history: file_processing_history,
+    logger: logger,
+    exit_handler: exit_handler
   )
 end
