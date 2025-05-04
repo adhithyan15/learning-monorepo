@@ -53,9 +53,14 @@ jobs:
           cmake --version
           choco install ninja
           ninja --version
-          $latest = Invoke-RestMethod -Uri "https://api.github.com/repos/bytecodealliance/wasmtime/releases/latest"
-          $asset = $latest.assets | Where-Object { $_.name -eq "wasmtime-x86_64-windows.zip" }
-          Invoke-WebRequest -Uri $asset.browser_download_url -OutFile "wasmtime.zip"
+          $headers = @{ "User-Agent" = "github-actions" }
+          $latest = Invoke-RestMethod -Uri "https://api.github.com/repos/bytecodealliance/wasmtime/releases/latest" -Headers $headers
+          $asset = $latest.assets | Where-Object { $_.name -like "*x86_64-windows.zip" }
+          if ($null -eq $asset) {
+            Write-Error "Could not find the Windows ZIP asset in the latest Wasmtime release."
+            exit 1
+          }
+          Invoke-WebRequest -Uri $asset.browser_download_url -OutFile wasmtime.zip
           Expand-Archive -Path wasmtime.zip -DestinationPath wasmtime
           echo "$env:GITHUB_WORKSPACE\wasmtime" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           wasmtime --version
