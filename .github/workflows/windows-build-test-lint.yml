@@ -57,7 +57,9 @@ jobs:
           $asset = $latest.assets | Where-Object { $_.name -eq "wasmtime-x86_64-windows.zip" }
           Invoke-WebRequest -Uri $asset.browser_download_url -OutFile "wasmtime.zip"
           Expand-Archive -Path wasmtime.zip -DestinationPath wasmtime
-          echo "$env:GITHUB_WORKSPACE\wasmtime" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          $extractedDir = Get-ChildItem -Path "$env:GITHUB_WORKSPACE\wasmtime" -Directory | Select-Object -First 1
+          $wasmtimeBinPath = $extractedDir.FullName
+          $wasmtimeBinPath | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           wasmtime --version
           gem install rubocop --no-document
           ruby code\programs\ruby\monorepo_build\build.rb
