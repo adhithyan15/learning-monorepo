@@ -58,6 +58,7 @@ def parse_env(set_output_lines)
     line.strip!
     parts = line.split('=', 2)
     next unless parts.length == 2 && !parts[0].empty?
+
     env_hash[parts[0]] = parts[1]
   end
   env_hash
@@ -158,7 +159,7 @@ end
 
 # --- Helper Functions ---
 
-def execute_command(command, current_working_directory)
+def execute_command(command, current_working_directory, context)
   puts "[CMD] In '#{current_working_directory}': #{command}"
   stdout_str, stderr_str, status = Open3.capture3(ENV, command, chdir: current_working_directory)
 
@@ -167,11 +168,11 @@ def execute_command(command, current_working_directory)
   unless status.success?
     puts "[ERR] Command failed! (Exit Status: #{status.exitstatus})"
     puts "[ERR] #{stderr_str.strip}" unless stderr_str.strip.empty?
-    exit(status.exitstatus)
+    context.exit_handler.exit_with_code(status.exitstatus)
   end
 rescue => e
   puts "[ERR] Failed to execute command '#{command}' in '#{current_working_directory}': #{e.message}"
-  exit(1)
+  context.exit_handler.exit_with_code(1)
 end
 
 def check_os_match(build_file_path)
@@ -194,7 +195,7 @@ def check_os_match(build_file_path)
   end
 end
 
-def process_build_file(build_file_path)
+def process_build_file(build_file_path, context)
   absolute_path = File.absolute_path(build_file_path)
 
   unless check_os_match(absolute_path)
@@ -207,17 +208,17 @@ def process_build_file(build_file_path)
 
   begin
     build_file_contents = File.readlines(absolute_path)
-    build_file_contents.each_with_index do |line, index|
+    build_file_contents.each_with_index do |line, _index|
       command = line.strip
       next if command.empty? || command.start_with?(BUILD_COMMENT_CHAR)
-      execute_command(command, current_directory)
+      execute_command(command, current_directory, context)
     end
   rescue Errno::ENOENT
     puts "[ERR] Build file not found: #{absolute_path}"
-    exit(1)
+    context.exit_handler.exit_with_code(1)
   rescue => e
     puts "[ERR] Error reading build file #{absolute_path}: #{e.message}"
-    exit(1)
+    context.exit_handler.exit_with_code(1)
   end
 end
 
@@ -256,21 +257,23 @@ def process_dirs_file(dirs_file_path, context)
           if filename == DIRS_FILE_NAME
             process_dirs_file(full_entry_path, context)
           elsif filename.match?(BUILD_FILE_PATTERN)
-            process_build_file(full_entry_path)
+            process_build_file(full_entry_path, context)
           end
         end
       end
     end
   rescue Errno::ENOENT
     puts "[ERR] DIRS file not found: #{absolute_path}"
-    exit(1)
+    context.exit_handler.exit_with_code(1)
   rescue => e
     puts "[ERR] Error reading DIRS file #{absolute_path}: #{e.message}"
-    exit(1)
+    context.exit_handler.exit_with_code(1)
   end
 end
 
 # --- Main Execution Logic ---
+
+context = get_context
 
 begin
   if RUBY_PLATFORM.match?(/mingw|mswin/i)
@@ -283,30 +286,27 @@ begin
 rescue => e
   puts "[FATAL ERR] Failed during MSVC environment setup: #{e.message}"
   puts e.backtrace.join("\n")
-  exit(1)
+  context.exit_handler.exit_with_code(1)
 end
 
 if ARGV.length == 1
   user_provided_path = ARGV[0]
   if File.file?(user_provided_path) && File.basename(user_provided_path).match?(BUILD_FILE_PATTERN)
-    context = get_context
     absolute_path = File.absolute_path(user_provided_path)
     puts "[INFO] User requested single BUILD file execution:"
     puts "[INFO] > #{absolute_path}"
-    process_build_file(absolute_path)
+    process_build_file(absolute_path, context)
     puts "\n--------------------------------"
     puts "[INFO] Single BUILD file finished successfully."
-    exit(0)
+    context.exit_handler.exit_with_code(0)
   else
     puts "[ERR] Provided path is not a valid BUILD file: #{user_provided_path}"
-    exit(1)
+    context.exit_handler.exit_with_code(1)
   end
 end
 
 start_directory = Dir.pwd
 puts "[INFO] Starting build scan in: #{start_directory}"
-
-context = get_context
 
 begin
   Dir.foreach(start_directory) do |entry|
@@ -318,16 +318,16 @@ begin
       if filename == DIRS_FILE_NAME
         process_dirs_file(entry_path, context)
       elsif filename.match?(BUILD_FILE_PATTERN)
-        process_build_file(entry_path)
+        process_build_file(entry_path, context)
       end
     end
   end
 rescue => e
   puts "[ERR] An unexpected error occurred during initial scan: #{e.message}"
   puts e.backtrace.join("\n")
-  exit(1)
+  context.exit_handler.exit_with_code(1)
 end
 
 puts "\n--------------------------------"
 puts "[INFO] Build finished successfully."
-exit(0)
+context.exit_handler.exit_with_code(0)
