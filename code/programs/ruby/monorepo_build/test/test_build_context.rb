@@ -14,7 +14,7 @@ class BuildContextTest < Minitest::Test
     file_processing_history = FileProcessingHistory.new
     exit_handler = ExitHandler.new
     env = EnvAccessor.new
-    command_runner = CommandRunner.new
+    command_runner = CommandRunner.new(logger)
 
     @context = BuildContext.new(
       file_processing_history: file_processing_history,

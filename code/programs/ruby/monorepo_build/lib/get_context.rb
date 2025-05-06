@@ -13,7 +13,7 @@ def get_context
   file_processing_history = FileProcessingHistory.new
   exit_handler = ExitHandler.new
   env = EnvAccessor.new
-  command_runner = CommandRunner.new
+  command_runner = CommandRunner.new(logger)
 
   BuildContext.new(
     file_processing_history: file_processing_history,
