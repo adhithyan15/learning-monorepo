@@ -59,4 +59,5 @@ jobs:
       - run: ninja --version
       - run: gem install rubocop --no-document
       - run: brew install kotlin
+      - run: brew install sbcl
       - run: ruby code/programs/ruby/monorepo_build/build.rb

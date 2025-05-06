@@ -1,0 +1,1 @@
+sbcl --script hello-world.lisp

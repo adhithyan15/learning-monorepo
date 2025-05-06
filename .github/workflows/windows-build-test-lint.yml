@@ -56,4 +56,6 @@ jobs:
           gem install rubocop --no-document
           choco install kotlinc
           kotlinc -version
+          choco install sbcl
+          sbcl --version
           ruby code\programs\ruby\monorepo_build\build.rb
