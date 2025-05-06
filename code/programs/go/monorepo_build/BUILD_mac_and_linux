@@ -1,2 +1,2 @@
-go build -o monorepo_build
+go build -o build
 ./build
