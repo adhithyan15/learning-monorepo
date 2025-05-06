@@ -5,6 +5,7 @@ require_relative '../lib/logger'
 require_relative '../lib/exit_handler'
 require_relative '../lib/env_accessor'
 require_relative '../lib/command_runner'
+require_relative '../lib/path_resolver'
 require_relative "memory_processor"
 
 class BuildContextTest < Minitest::Test
@@ -15,13 +16,15 @@ class BuildContextTest < Minitest::Test
     exit_handler = ExitHandler.new
     env = EnvAccessor.new
     command_runner = CommandRunner.new(logger)
+    path_resolver = PathResolver.new
 
     @context = BuildContext.new(
       file_processing_history: file_processing_history,
       logger: logger,
       exit_handler: exit_handler,
       env: env,
-      command_runner: command_runner
+      command_runner: command_runner,
+      path_resolver: path_resolver
     )
   end
 

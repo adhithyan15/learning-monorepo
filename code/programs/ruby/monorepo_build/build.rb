@@ -3,7 +3,7 @@ require 'set'
 require 'pathname'
 
 require_relative 'lib/get_context'
-require_relative 'lib/errors/msvc/vswhere_not_found_error'
+require_relative 'lib/find_vswhere'
 
 # --- Configuration ---
 BUILD_FILE_PATTERN = /^BUILD(?:_windows|_mac_and_linux|_mac|_linux)?$/
@@ -13,16 +13,6 @@ BUILD_COMMENT_CHAR = '#'
 # ==================================================
 # MSVC Environment Setup Code (for Windows)
 # ==================================================
-
-def find_vswhere(context)
-  vswhere_path = Pathname.new(context.env['ProgramFiles(x86)']) / 'Microsoft Visual Studio' / 'Installer' / 'vswhere.exe'
-  return vswhere_path.to_s if vswhere_path.exist?
-
-  result = context.command_runner.run('where vswhere.exe')
-  return result.stdout.lines.first.strip if result.success? && !result.stdout.strip.empty?
-
-  raise VswhereNotFoundError
-end
 
 def find_vcvarsall(context, vs_version = nil)
   vswhere_exe = find_vswhere(context)
