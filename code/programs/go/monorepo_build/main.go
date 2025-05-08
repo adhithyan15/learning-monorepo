@@ -1,7 +1,6 @@
 package main
 
-import "fmt"
-
 func main() {
-	fmt.Println("Hello World!")
+	context := GetBuildContext()
+	context.logger.Info("Hello, world!")
 }
