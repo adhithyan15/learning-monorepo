@@ -53,6 +53,11 @@ jobs:
         run: |
           curl -sS https://getcomposer.org/installer | php
           sudo mv composer.phar /usr/local/bin/composer
+      - name: Install Wasmtime
+        run: |
+          curl https://wasmtime.dev/install.sh -sSf | bash
+          echo "$HOME/.wasmtime/bin" >> $GITHUB_PATH
+      - run: wasmtime --version
       - run: composer -v
       - run: cmake --version
       - run: brew install ninja
