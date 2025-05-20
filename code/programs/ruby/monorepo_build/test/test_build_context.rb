@@ -7,6 +7,7 @@ require_relative '../lib/env_accessor'
 require_relative '../lib/command_runner'
 require_relative '../lib/path_resolver'
 require_relative "memory_processor"
+require_relative "stubs/command_line_arguments_provider_stub"
 
 class BuildContextTest < Minitest::Test
   def setup
@@ -17,6 +18,7 @@ class BuildContextTest < Minitest::Test
     env = EnvAccessor.new
     command_runner = CommandRunner.new(logger)
     path_resolver = PathResolver.new
+    command_line_arguments_provider = CommandLineArgumentsProviderStub.new
 
     @context = BuildContext.new(
       file_processing_history: file_processing_history,
@@ -24,7 +26,8 @@ class BuildContextTest < Minitest::Test
       exit_handler: exit_handler,
       env: env,
       command_runner: command_runner,
-      path_resolver: path_resolver
+      path_resolver: path_resolver,
+      command_line_arguments_provider: command_line_arguments_provider
     )
   end
 

@@ -261,8 +261,9 @@ rescue => e
   context.exit_handler.exit_with_code(1)
 end
 
-if ARGV.length == 1
-  user_provided_path = ARGV[0]
+arguments = context.command_line_arguments_provider.arguments
+if arguments.length == 1
+  user_provided_path = arguments[0]
   if File.file?(user_provided_path) && File.basename(user_provided_path).match?(BUILD_FILE_PATTERN)
     absolute_path = File.absolute_path(user_provided_path)
     context.logger.info('User requested single BUILD file execution:')
