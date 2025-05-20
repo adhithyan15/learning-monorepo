@@ -7,6 +7,7 @@ require_relative 'build_context'
 require_relative 'env_accessor'
 require_relative 'command_runner'
 require_relative 'path_resolver'
+require_relative 'default_command_line_arguments_provider'
 
 def get_context(
   logger_to_override: nil,
@@ -14,7 +15,8 @@ def get_context(
   command_runner_to_override: nil,
   env_accessor_to_override: nil,
   path_resolver_to_override: nil,
-  file_processing_history_to_override: nil
+  file_processing_history_to_override: nil,
+  command_line_arguments_provider_to_override: nil
 )
   logger = if logger_to_override
              logger_to_override
@@ -28,6 +30,7 @@ def get_context(
   env_accessor = env_accessor_to_override || EnvAccessor.new
   path_resolver = path_resolver_to_override || PathResolver.new
   file_processing_history = file_processing_history_to_override || FileProcessingHistory.new
+  command_line_arguments_provider = command_line_arguments_provider_to_override || DefaultCommandLineArgumentsProvider.new
 
   BuildContext.new(
     file_processing_history: file_processing_history,
@@ -35,6 +38,7 @@ def get_context(
     exit_handler: exit_handler,
     command_runner: command_runner,
     env: env_accessor,
-    path_resolver: path_resolver
+    path_resolver: path_resolver,
+    command_line_arguments_provider: command_line_arguments_provider
   )
 end
